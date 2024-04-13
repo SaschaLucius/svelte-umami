@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => ({
 	resolve: {
 		conditions: mode === 'test' ? ['browser'] : []
 	},
+	alias: [{ find: /^svelte$/, replacement: 'svelte/internal' }],
 	test: {
 		environment: 'jsdom',
 		setupFiles: ['./vitest-setup.js'],

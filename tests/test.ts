@@ -6,3 +6,8 @@ test('index page has expected h1', async ({ page }) => {
 		page.getByRole('heading', { name: 'Welcome to your library project' })
 	).toBeVisible();
 });
+
+test('index page has expected h1', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.getByTestId('umami_analytics_script')).toBeVisible();
+});
