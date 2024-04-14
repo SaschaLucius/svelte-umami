@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UmamiTrack from '$lib/components/UmamiTrackClick.svelte';
+	import UmamiTrack from '$lib/components/UmamiTrackClicks.svelte';
 </script>
 
 <svelte:head>

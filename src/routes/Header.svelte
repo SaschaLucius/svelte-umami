@@ -6,11 +6,7 @@
 
 <header>
 	<div class="corner">
-		<a
-			href="https://kit.svelte.dev"
-			data-umami-event="href clicked"
-			data-umami-event-href="SvelteKit"
-		>
+		<a href="https://kit.svelte.dev">
 			<img src={logo} alt="SvelteKit" />
 		</a>
 	</div>
@@ -21,20 +17,12 @@
 		</svg>
 		<ul>
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/" data-umami-event="href clicked" data-umami-event-href="Home">Home</a>
+				<a href="/">Home</a>
 			</li>
-			<li
-				aria-current={$page.url.pathname === '/about' ? 'page' : undefined}
-				data-umami-event="href clicked"
-				data-umami-event-href="About"
-			>
+			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
 				<a href="/about">About</a>
 			</li>
-			<li
-				aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}
-				data-umami-event="href clicked"
-				data-umami-event-href="Sverdle"
-			>
+			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
 				<a href="/sverdle">Sverdle</a>
 			</li>
 		</ul>
@@ -44,11 +32,7 @@
 	</nav>
 
 	<div class="corner">
-		<a
-			href="https://github.com/sveltejs/kit"
-			data-umami-event="href clicked"
-			data-umami-event-href="GitHub"
-		>
+		<a href="https://github.com/sveltejs/kit">
 			<img src={github} alt="GitHub" />
 		</a>
 	</div>

@@ -4,25 +4,6 @@ import type { UmamiTrackerConfiguration } from './types';
 
 declare let window: WindowWithUmami;
 
-export function disableTracking(): void {
-	if (browser && localStorage) {
-		localStorage.setItem('umami.disabled', 'true');
-	}
-}
-
-export function enableTracking(): void {
-	if (browser && localStorage) {
-		localStorage.removeItem('umami.disabled');
-	}
-}
-
-export function isTrackingEnabled(): boolean {
-	if (browser && localStorage) {
-		return !(localStorage.getItem('umami.disabled') === 'true') && window.umami !== undefined;
-	}
-	return false;
-}
-
 /**
  * Track a page view with and without custom properties
  * @param properties

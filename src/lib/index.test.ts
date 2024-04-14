@@ -1,11 +1,12 @@
 import { render } from '@testing-library/svelte';
+import { get } from 'svelte/store';
 
 import { describe, it, expect } from 'vitest';
-import { UmamiAnalytics, enableTracking } from './index';
+import { UmamiAnalytics, isEnabled } from './index';
 
 describe('Test Exports', () => {
 	it('Functions', () => {
-		expect(enableTracking()).toBe(undefined);
+		expect(get(isEnabled)).toBe(true);
 	});
 
 	it('Class', () => {
