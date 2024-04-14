@@ -14,20 +14,15 @@
 		'data-auto-track': false
 	}}
 />
+<UmamiTrackClick name="element clicked">
+	<section>
+		<h1>Click Tracker Track</h1>
 
-<section>
-	<UmamiTrackClick name="element clicked">
-		<h1>Click Handler Track</h1>
+		<h2>please add clickHandler to your elements</h2>
 
-		<h2>please add data-umami-event to your elements</h2>
-
-		<button on:click={(e) => handleClick(e, 'button pressed')}>
-			<svg aria-hidden="true" viewBox="0 0 1 1">
-				<path d="M0,0.5 L1,0.5" />
-			</svg>
-		</button>
-	</UmamiTrackClick>
-</section>
+		<button on:click={(e) => handleClick(e, 'button pressed')}> Click me </button>
+	</section>
+</UmamiTrackClick>
 
 <style>
 	section {

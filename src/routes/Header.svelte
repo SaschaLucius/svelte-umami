@@ -19,6 +19,18 @@
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
+			<li aria-current={$page.url.pathname === '/advancedConfiguration-test' ? 'page' : undefined}>
+				<a href="/advancedConfiguration-test">Test1</a>
+			</li>
+			<li aria-current={$page.url.pathname === '/button-auto-test' ? 'page' : undefined}>
+				<a href="/button-auto-test">Test2</a>
+			</li>
+			<li aria-current={$page.url.pathname === '/button-clickHandler-test' ? 'page' : undefined}>
+				<a href="/button-clickHandler-test">Test3</a>
+			</li>
+			<li aria-current={$page.url.pathname === '/button-clickTracker-test' ? 'page' : undefined}>
+				<a href="/button-clickTracker-test">Test4</a>
+			</li>
 			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
 				<a href="/about">About</a>
 			</li>

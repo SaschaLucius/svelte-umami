@@ -16,15 +16,11 @@
 />
 
 <section>
-	<h1>Click Handler Track</h1>
+	<h1>TODO</h1>
 
 	<h2>please add data-umami-event to your elements</h2>
 
-	<button on:click={(e) => handleClick(e, 'button pressed')}>
-		<svg aria-hidden="true" viewBox="0 0 1 1">
-			<path d="M0,0.5 L1,0.5" />
-		</svg>
-	</button>
+	<button on:click={(e) => handleClick(e, 'button pressed')}> Click me</button>
 </section>
 
 <style>
