@@ -1,11 +1,10 @@
 <script context="module" lang="ts">
+	// initialize the script only once
 	let initialized = false;
 </script>
 
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { UmamiTrackerConfiguration } from '$lib/types';
-	import { browser } from '$app/environment';
 
 	export let websiteID: string;
 	export let srcURL: string;
@@ -24,12 +23,7 @@
 			data-testid="umami_analytics_script"
 			src={srcURL}
 			data-website-id={websiteID}
-			data-host-url="http://stats.mywebsite.com"
-			data-auto-track="false"
-			data-cache="true"
-			data-domains="mywebsite.com,mywebsite2.com"
-			data-exclude-search="true"
-			data-tag="example"
+			{...configuration}
 		></script>
 	{/if}
 </svelte:head>

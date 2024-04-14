@@ -118,12 +118,16 @@ export async function registerUmami(
 }
 
 function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerConfiguration) {
-	if (config['host-url']) scriptElem.setAttribute('data-host-url', config['host-url']);
-	if (config['auto-track'] !== undefined && !config['auto-track'])
+	if (config['data-host-url']) scriptElem.setAttribute('data-host-url', config['data-host-url']);
+	if (config['data-auto-track'] !== undefined && !config['data-auto-track'])
 		scriptElem.setAttribute('data-auto-track', 'false');
-	if (config.cache) scriptElem.setAttribute('data-cache', 'true');
-	if (config.domains && config.domains.length > 0)
-		scriptElem.setAttribute('data-domains', config.domains.join(','));
-	if (config['exclude-search']) scriptElem.setAttribute('data-exclude-search', 'true');
-	if (config.tag) scriptElem.setAttribute('data-tag', config.tag);
+	if (config['data-cache']) scriptElem.setAttribute('data-cache', 'true');
+	if (config['data-domains']) scriptElem.setAttribute('data-domains', config['data-domains']);
+	if (config['data-exclude-search']) scriptElem.setAttribute('data-exclude-search', 'true');
+	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
+}
+
+export function handleClick(e: MouseEvent, eventName: string) {
+	const target = e.currentTarget as unknown as EventData;
+	trackEvent(eventName, target);
 }

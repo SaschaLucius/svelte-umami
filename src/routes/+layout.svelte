@@ -8,9 +8,9 @@
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
-		'auto-track': false,
-		tag: 'example',
-		'exclude-search': true
+		'data-auto-track': false,
+		'data-tag': 'example',
+		'data-exclude-search': true
 	}}
 />
 
@@ -18,9 +18,9 @@
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
-		'auto-track': false,
-		tag: 'example',
-		'exclude-search': true
+		'data-auto-track': false,
+		'data-tag': 'example',
+		'data-exclude-search': true
 	}}
 />
 
