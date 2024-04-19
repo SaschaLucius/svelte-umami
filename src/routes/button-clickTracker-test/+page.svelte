@@ -1,5 +1,5 @@
 <script>
-	import { UmamiAnalytics, UmamiTrackClick, handleClick } from '$lib';
+	import { UmamiAnalytics, UmamiTrackClick } from '$lib';
 </script>
 
 <svelte:head>

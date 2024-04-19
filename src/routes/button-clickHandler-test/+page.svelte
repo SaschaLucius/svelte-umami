@@ -1,5 +1,5 @@
 <script>
-	import { UmamiAnalytics, handleClick, trackPageView } from '$lib';
+	import { UmamiAnalytics, handleEvent } from '$lib';
 </script>
 
 <svelte:head>
@@ -23,7 +23,7 @@
 
 	<h2>please add data-umami-event to your elements</h2>
 
-	<button on:click={(e) => handleClick(e, 'button pressed')}> Click me </button>
+	<button on:click={(e) => handleEvent('Click me button', e)}> Click me </button>
 </section>
 
 <style>

@@ -26,7 +26,12 @@ export function trackPageView(properties?: TrackedProperties): Promise<string> {
 /**
  * - Track an event with a given name
  * @param eventName Note: event names will be truncated past 50 characters
- * @param eventData
+ * @param eventData Note: Event Data Limits
+						Event Data can work with any JSON data. There are a few rules in place to maintain performance.
+						- Numbers have a max precision of 4.
+						- Strings have a max length of 500.
+						- Arrays are converted to a String, with the same max length of 500.
+						- Objects have a max of 50 properties. Arrays are considered 1 property.
  * @returns
  */
 export function trackEvent(eventName: string, eventData?: EventData): Promise<string> {
@@ -107,7 +112,6 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
 }
 
-export function handleClick(e: MouseEvent, eventName: string) {
-	const target = e.currentTarget as unknown as EventData;
-	trackEvent(eventName, target);
+export function handleEvent(eventName: string, e?: Event & { currentTarget: HTMLElement }) {
+	trackEvent(eventName, e as unknown as EventData);
 }
