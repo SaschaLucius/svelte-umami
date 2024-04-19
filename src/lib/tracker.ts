@@ -112,6 +112,11 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
 }
 
-export function handleEvent(eventName: string, e?: Event & { currentTarget: HTMLElement }) {
-	trackEvent(eventName, e as unknown as EventData);
+export function handleEventWithEventType(eventName: string, e: Event) {
+	trackEvent(eventName + '' + e.type, e as unknown as EventData);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function handleEvent(eventName: string, e?: any) {
+	trackEvent(eventName, e as EventData);
 }
