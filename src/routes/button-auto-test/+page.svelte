@@ -13,6 +13,7 @@
 <UmamiAnalytics
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
+	overwrite={true}
 />
 
 <section>

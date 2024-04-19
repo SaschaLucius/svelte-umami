@@ -5,10 +5,21 @@
 
 <script lang="ts">
 	import type { UmamiTrackerConfiguration } from '$lib/types';
+	import { browser } from '$app/environment';
 
 	export let websiteID: string;
 	export let srcURL: string;
 	export let configuration: UmamiTrackerConfiguration = {};
+	export let overwrite = false;
+
+	if (initialized && overwrite) {
+		if (browser) {
+			const script = document.getElementById('umami_analytics_script');
+			script?.remove();
+		}
+
+		initialized = false;
+	}
 
 	let shouldInitialize = !initialized;
 	initialized = true;

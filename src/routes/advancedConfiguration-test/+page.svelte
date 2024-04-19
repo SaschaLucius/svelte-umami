@@ -13,6 +13,7 @@
 	configuration={{
 		'data-auto-track': false
 	}}
+	overwrite={true}
 />
 
 <section>

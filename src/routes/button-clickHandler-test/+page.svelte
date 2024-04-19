@@ -1,5 +1,5 @@
 <script>
-	import { UmamiAnalytics, handleClick } from '$lib';
+	import { UmamiAnalytics, handleClick, trackPageView } from '$lib';
 </script>
 
 <svelte:head>
@@ -11,10 +11,11 @@
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
-		'data-auto-track': true,
+		'data-auto-track': false,
 		'data-tag': 'example',
 		'data-exclude-search': true
 	}}
+	overwrite={true}
 />
 
 <section>

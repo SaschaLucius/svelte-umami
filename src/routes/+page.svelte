@@ -2,12 +2,18 @@
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import { UmamiAnalytics } from '$lib';
 </script>
 
 <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
+
+<UmamiAnalytics
+	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
+	srcURL="https://eu.umami.is/script.js"
+/>
 
 <section>
 	<h1>

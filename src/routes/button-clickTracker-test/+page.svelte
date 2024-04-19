@@ -13,6 +13,7 @@
 	configuration={{
 		'data-auto-track': false
 	}}
+	overwrite={true}
 />
 <UmamiTrackClick name="element clicked">
 	<section>
@@ -20,7 +21,7 @@
 
 		<h2>please add clickHandler to your elements</h2>
 
-		<button on:click={(e) => handleClick(e, 'button pressed')}> Click me </button>
+		<button> Click me </button>
 	</section>
 </UmamiTrackClick>
 

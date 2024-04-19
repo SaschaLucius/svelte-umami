@@ -4,7 +4,7 @@
 	import './styles.css';
 </script>
 
-<UmamiAnalytics
+<!--UmamiAnalytics
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
@@ -12,17 +12,7 @@
 		'data-tag': 'example',
 		'data-exclude-search': true
 	}}
-/>
-
-<UmamiAnalytics
-	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
-	srcURL="https://eu.umami.is/script.js"
-	configuration={{
-		'data-auto-track': false,
-		'data-tag': 'example',
-		'data-exclude-search': true
-	}}
-/>
+/-->
 
 <div class="app">
 	<Header />

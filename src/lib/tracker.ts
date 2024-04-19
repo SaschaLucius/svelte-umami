@@ -11,7 +11,6 @@ declare let window: WindowWithUmami;
  */
 export function trackPageView(properties?: TrackedProperties): Promise<string> {
 	if (!browser) return Promise.resolve('');
-
 	if (!window.umami) return Promise.resolve('Umami not found.');
 
 	if (properties) {
