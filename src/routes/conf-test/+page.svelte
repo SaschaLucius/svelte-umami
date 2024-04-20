@@ -1,5 +1,5 @@
 <script>
-	import { UmamiAnalytics, handleEvent } from '$lib';
+	import { UmamiAnalytics } from '$lib';
 </script>
 
 <svelte:head>
@@ -11,17 +11,21 @@
 	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
-		'data-auto-track': false
+		'data-auto-track': true,
+		'data-tag': 'example',
+		'data-exclude-search': true
 	}}
 	overwrite={true}
 />
 
 <section>
-	<h1>TODO</h1>
+	<h1>Advanced Configuration</h1>
 
-	<h2>please add data-umami-event to your elements</h2>
+	<h2>You can add multiple configuration parameter to the UmamiAnalytics element</h2>
 
-	<button data-umami-event="Click me button" on:click={handleEvent}> Click me</button>
+	<button data-umami-event="Click me button">
+		Click me and the URL parameter will not be tracked</button
+	>
 </section>
 
 <style>

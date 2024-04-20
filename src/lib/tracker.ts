@@ -1,7 +1,6 @@
 import { browser } from '$app/environment';
 import type { EventData, TrackedProperties, WindowWithUmami } from './types';
 import type { UmamiTrackerConfiguration } from './types';
-import { get } from 'svelte/store';
 
 declare let window: WindowWithUmami;
 

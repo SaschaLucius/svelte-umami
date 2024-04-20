@@ -19,23 +19,20 @@
 			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
 				<a href="/">Home</a>
 			</li>
-			<li aria-current={$page.url.pathname === '/advancedConfiguration-test' ? 'page' : undefined}>
-				<a href="/advancedConfiguration-test">Test1</a>
+			<li aria-current={$page.url.pathname === '/conf-test' ? 'page' : undefined}>
+				<a href="/conf-test?search=umami">Configuration</a>
 			</li>
-			<li aria-current={$page.url.pathname === '/button-auto-test' ? 'page' : undefined}>
-				<a href="/button-auto-test">Test2</a>
+			<li aria-current={$page.url.pathname === '/autoTracking-test' ? 'page' : undefined}>
+				<a href="/autoTracking-test">auto tracking</a>
 			</li>
-			<li aria-current={$page.url.pathname === '/button-clickHandler-test' ? 'page' : undefined}>
-				<a href="/button-clickHandler-test">Test3</a>
+			<li aria-current={$page.url.pathname === '/eventHandler-test' ? 'page' : undefined}>
+				<a href="/eventHandler-test">Event Handler</a>
 			</li>
-			<li aria-current={$page.url.pathname === '/button-clickTracker-test' ? 'page' : undefined}>
-				<a href="/button-clickTracker-test">Test4</a>
+			<li aria-current={$page.url.pathname === '/trackClicks-test' ? 'page' : undefined}>
+				<a href="/trackClicks-test">Umami Track Clicks</a>
 			</li>
 			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
 				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
 			</li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">

@@ -1,7 +1,4 @@
 <script>
-	import Counter from '../Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
 	import { UmamiAnalytics } from '$lib';
 </script>
 
@@ -17,7 +14,7 @@
 />
 
 <section>
-	<h1>Auto Track</h1>
+	<h1>Auto Track clicks</h1>
 
 	<h2>please add data-umami-event to your elements</h2>
 

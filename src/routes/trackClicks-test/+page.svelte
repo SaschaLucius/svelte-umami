@@ -1,5 +1,5 @@
 <script>
-	import { UmamiAnalytics, UmamiTrackClick } from '$lib';
+	import { UmamiAnalytics, UmamiTrackClicks } from '$lib';
 </script>
 
 <svelte:head>
@@ -15,15 +15,15 @@
 	}}
 	overwrite={true}
 />
-<UmamiTrackClick name="element clicked">
-	<section>
-		<h1>Click Tracker Track</h1>
+<UmamiTrackClicks name="element clicked">
+	<section data-umami-event="section">
+		<h1 data-umami-event="header">Click Tracker Track</h1>
 
-		<h2>please add clickHandler to your elements</h2>
+		<h2>please add UmamiTrackClicks around your elements and add data-umami-event where needed</h2>
 
-		<button> Click me </button>
+		<button data-umami-event="button"> Click me </button>
 	</section>
-</UmamiTrackClick>
+</UmamiTrackClicks>
 
 <style>
 	section {
