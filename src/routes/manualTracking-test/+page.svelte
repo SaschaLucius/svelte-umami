@@ -1,5 +1,9 @@
-<script>
-	import { UmamiAnalytics, UmamiTrackClicks } from '$lib';
+<script lang="ts">
+	import { UmamiAnalytics, trackEvent, trackPageView } from '$lib';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		trackPageView();
+	});
 </script>
 
 <svelte:head>
@@ -16,15 +20,14 @@
 	overwrite={true}
 />
 
-<UmamiTrackClicks name="element clicked">
-	<section data-umami-event="section">
-		<h1 data-umami-event="header">Click Tracker Track</h1>
+<section>
+	<h1>Manual Track clicks</h1>
 
-		<h2>please add UmamiTrackClicks around your elements and add data-umami-event where needed</h2>
-
-		<button data-umami-event="button"> Click me </button>
-	</section>
-</UmamiTrackClicks>
+	<button on:click={(e) => trackEvent('button pressed', { key: 'value' })}> Track Event </button>
+	<button on:click={(e) => trackPageView({ url: 'test', referrer: 'google' })}>
+		Track Page view
+	</button>
+</section>
 
 <style>
 	section {

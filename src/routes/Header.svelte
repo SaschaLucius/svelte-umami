@@ -23,6 +23,9 @@
 			<li aria-current={$page.url.pathname === '/autoTracking-test' ? 'page' : undefined}>
 				<a href="/autoTracking-test">auto tracking</a>
 			</li>
+			<li aria-current={$page.url.pathname === '/manualTracking-test' ? 'page' : undefined}>
+				<a href="/manualTracking-test">manual tracking</a>
+			</li>
 			<li aria-current={$page.url.pathname === '/eventHandler-test' ? 'page' : undefined}>
 				<a href="/eventHandler-test">Event Handler</a>
 			</li>
