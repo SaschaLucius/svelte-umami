@@ -23,7 +23,7 @@
 
 	<h2>please add data-umami-event to your elements</h2>
 
-	<button on:click={(e) => handleEvent('Click me button', e)}> Click me </button>
+	<button data-umami-event="Click me button" on:click={handleEvent}> Click me </button>
 </section>
 
 <style>

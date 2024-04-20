@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
 import type { EventData, TrackedProperties, WindowWithUmami } from './types';
 import type { UmamiTrackerConfiguration } from './types';
+import { get } from 'svelte/store';
 
 declare let window: WindowWithUmami;
 
@@ -112,11 +113,16 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
 }
 
-export function handleEventWithEventType(eventName: string, e: Event) {
-	trackEvent(eventName + '' + e.type, e as unknown as EventData);
-}
+export function handleEvent(e: Event & { currentTarget: HTMLElement }) {
+	// The target property returns the element on which the event occurred, opposed to the currentTarget property, which returns the element whose event listener triggered the event.
+	const targetUmamiId = (e.target as Element)?.getAttribute('data-umami-event');
+	const currentTargetUmamiId = e.currentTarget?.getAttribute('data-umami-event');
+	const targetId = (e.target as Element)?.getAttribute('id');
+	const currentTargetId = e.currentTarget?.getAttribute('id');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function handleEvent(eventName: string, e?: any) {
-	trackEvent(eventName, e as EventData);
+	console.log(targetUmamiId, currentTargetUmamiId, targetId, currentTargetId, e.type);
+	trackEvent(
+		`${targetUmamiId ?? currentTargetUmamiId ?? targetId ?? currentTargetId} ${e.type}`,
+		e as unknown as EventData
+	);
 }

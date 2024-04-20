@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { UmamiAnalytics, handleEvent } from '$lib';
+	import { UmamiAnalytics, handleEvent, trackPageView } from '$lib';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		trackPageView();
+	});
 </script>
 
 <svelte:head>
@@ -17,29 +21,51 @@
 />
 
 <section>
-	<h1>Click Handler Track</h1>
+	<h1>Custom Handler Tracking</h1>
 
-	<h2>please add data-umami-event to your elements</h2>
+	<h2>please add handler to your elements</h2>
 
-	<button id="clicker" on:click={(e) => handleEvent('Clicker', e)}> Clicker </button>
+	<br />
+
+	<button data-umami-event="clicker" on:click={handleEvent}> Clicker </button>
+
+	<br />
 
 	<input
-		id="name"
+		data-umami-event="name"
 		type="text"
 		placeholder="Enter your name"
-		on:change={(e) => handleEvent('name', e)}
-		on:input={(e) => handleEvent('name', e)}
-		on:mousedown={(e) => handleEvent('name', e)}
-		on:keypress={(e) => handleEvent('name', e)}
+		on:change={handleEvent}
+		on:input={handleEvent}
+		on:mousedown={handleEvent}
+		on:keypress={handleEvent}
 	/>
 
+	<br />
+
 	<label for="cars">Choose a car:</label>
-	<select on:change={(e) => handleEvent('car', e)} id="cars" name="cars">
+	<select on:change={handleEvent} data-umami-event="cars" name="cars">
 		<option value="volvo">Volvo</option>
 		<option value="saab">Saab</option>
 		<option value="fiat">Fiat</option>
 		<option value="audi">Audi</option>
 	</select>
+
+	<br />
+
+	<fieldset data-umami-event="monster" on:change={handleEvent}>
+		<legend>Choose your monster's features:</legend>
+
+		<div>
+			<input type="checkbox" id="scales" name="scales" checked />
+			<label for="scales">Scales</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="horns" name="horns" />
+			<label for="horns">Horns</label>
+		</div>
+	</fieldset>
 </section>
 
 <style>
