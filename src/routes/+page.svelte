@@ -1,7 +1,5 @@
 <script>
 	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
 	import { UmamiAnalytics } from '$lib';
 </script>
 
@@ -19,8 +17,8 @@
 	<h1>
 		<span class="welcome">
 			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
+				<source srcset="/svelte-welcome.webp" type="image/webp" />
+				<img src="/svelte-welcome.png" alt="Welcome" />
 			</picture>
 		</span>
 
