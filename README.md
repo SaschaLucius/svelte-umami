@@ -144,7 +144,7 @@ there is a pre-defined event handler in this library
 </script>
 
 <UmamiAnalytics
-	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
+	websiteID="123456"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
 		'data-auto-track': false
@@ -175,7 +175,7 @@ If you want to track clicks for a complete section of your website or just multi
 </script>
 
 <UmamiAnalytics
-	websiteID="0904e6a4-a410-4778-8a77-74b102499058"
+	websiteID="123456"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
 		'data-auto-track': false
