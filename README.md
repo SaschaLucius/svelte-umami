@@ -5,6 +5,19 @@ All by this type-safe Svelte component.
 
 *Important* - this requires a [Umami Analytics](https://umami.is/) account.
 
+Components:
+- UmamiAnalytics: Umami initialization
+- UmamiAnalyticsEnv: Umami initialization with environment variables
+- UmamiTrackClicks: Track clicks in an area
+
+Functions:
+- trackPageView: Manual page view tracking
+- trackEvent: Event tracking
+- handleEvent: Svelte event handler for event tracking
+
+Stores:
+- isEnabled: Store for tracking and manipulating if the tracking is enabled
+
 ## Install the package
 
 ```bash
