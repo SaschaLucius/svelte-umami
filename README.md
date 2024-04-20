@@ -16,7 +16,7 @@ Functions:
 - handleEvent: Svelte event handler for event tracking
 
 Stores:
-- isEnabled: Store for tracking and manipulating if the tracking is enabled
+- isEnabled: Store for reading and writing if the tracking is enabled
 
 ## Install the package
 

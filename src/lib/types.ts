@@ -170,6 +170,63 @@ export type UmamiTracker = {
 	};
 };
 
+export type OptionalTrackedProperties = {
+	/**
+	 * Hostname of server
+	 *
+	 * @description extracted from `window.location.hostname`
+	 * @example 'analytics.umami.is'
+	 */
+	hostname?: string;
+
+	/**
+	 * Browser language
+	 *
+	 * @description extracted from `window.navigator.language`
+	 * @example 'en-US', 'fr-FR'
+	 */
+	language?: string;
+
+	/**
+	 * Page referrer
+	 *
+	 * @description extracted from `window.navigator.language`
+	 * @example 'https://analytics.umami.is/docs/getting-started'
+	 */
+	referrer?: string;
+
+	/**
+	 * Screen dimensions
+	 *
+	 * @description extracted from `window.screen.width` and `window.screen.height`
+	 * @example '1920x1080', '2560x1440'
+	 */
+	screen?: string;
+
+	/**
+	 * Page title
+	 *
+	 * @description extracted from `document.querySelector('head > title')`
+	 * @example 'umami'
+	 */
+	title?: string;
+
+	/**
+	 * Page url
+	 *
+	 * @description built from `${window.location.pathname}${window.location.search}`
+	 * @example 'docs/getting-started'
+	 */
+	url?: string;
+
+	/**
+	 * Website ID (required)
+	 *
+	 * @example 'b59e9c65-ae32-47f1-8400-119fcf4861c4'
+	 */
+	website?: string;
+};
+
 export interface WindowWithUmami extends Window {
 	umami: UmamiTracker;
 }

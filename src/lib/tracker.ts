@@ -1,5 +1,10 @@
 import { browser } from '$app/environment';
-import type { EventData, TrackedProperties, WindowWithUmami } from './types';
+import type {
+	EventData,
+	OptionalTrackedProperties,
+	TrackedProperties,
+	WindowWithUmami
+} from './types';
 import type { UmamiTrackerConfiguration } from './types';
 
 declare let window: WindowWithUmami;
@@ -9,7 +14,7 @@ declare let window: WindowWithUmami;
  * @param properties
  * @returns
  */
-export function trackPageView(properties?: TrackedProperties): Promise<string> {
+export function trackPageView(properties?: OptionalTrackedProperties): Promise<string> {
 	if (!browser) return Promise.resolve('');
 	if (!window.umami) return Promise.resolve('Umami not found.');
 
