@@ -112,6 +112,10 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
 }
 
+/**
+ * Svelte Event Handler, which tracks the event within UmamiAnalytics
+ * @param e: Event
+ */
 export function handleEvent(e: Event & { currentTarget: HTMLElement }) {
 	// The target property returns the element on which the event occurred, opposed to the currentTarget property, which returns the element whose event listener triggered the event.
 	const targetUmamiId = (e.target as Element)?.getAttribute('data-umami-event');
@@ -119,7 +123,6 @@ export function handleEvent(e: Event & { currentTarget: HTMLElement }) {
 	const targetId = (e.target as Element)?.getAttribute('id');
 	const currentTargetId = e.currentTarget?.getAttribute('id');
 
-	console.log(targetUmamiId, currentTargetUmamiId, targetId, currentTargetId, e.type);
 	trackEvent(
 		`${targetUmamiId ?? currentTargetUmamiId ?? targetId ?? currentTargetId} ${e.type}`,
 		e as unknown as EventData

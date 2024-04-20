@@ -13,7 +13,10 @@
 	configuration={{
 		'data-auto-track': true,
 		'data-tag': 'example',
-		'data-exclude-search': true
+		'data-exclude-search': true,
+		'data-host-url': 'https://eu.umami.is',
+		'data-domains': 'saschalucius.github.io',
+		'data-cache': true
 	}}
 	overwrite={true}
 />

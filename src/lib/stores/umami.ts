@@ -6,7 +6,7 @@ const stored =
 		? localStorage.getItem('umami')
 		: JSON.stringify({ enabled: true });
 
-// Set the stored value or a sane default.
+/** Svelte store to enable and disable the tracking. (https://umami.is/docs/track-events) */
 export const isEnabled = writable<boolean>(stored ? JSON.parse(stored).enabled : true);
 
 // Anytime the store changes, update the local storage value.
