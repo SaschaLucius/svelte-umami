@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { UmamiAnalytics, trackEvent, trackPageView } from '$lib';
+	import { UmamiAnalytics, trackEvent, trackEventWithProperties, trackPageView } from '$lib';
 	import { onMount } from 'svelte';
-	onMount(() => {
-		trackPageView();
-	});
+	let url = '/manualTracking-test';
 </script>
 
 <svelte:head>
@@ -24,8 +22,14 @@
 	<h1>Manual Track clicks</h1>
 
 	<button on:click={(e) => trackEvent('button pressed', { key: 'value' })}> Track Event </button>
+	<br />
 	<button on:click={(e) => trackPageView({ url: 'test', referrer: 'google' })}>
 		Track Page view
+	</button>
+	<br />
+	url:<input bind:value={url} />
+	<button on:click={(e) => trackEventWithProperties('button pressed on url:', { url: url })}>
+		Track Event with custom URL
 	</button>
 </section>
 

@@ -29,7 +29,7 @@ export function trackPageView(properties?: OptionalTrackedProperties): Promise<s
 }
 
 /**
- * - Track an event with a given name
+ * Track an event with a given name
  * @param eventName Note: event names will be truncated past 50 characters
  * @param eventData Note: Event Data Limits
 						Event Data can work with any JSON data. There are a few rules in place to maintain performance.
@@ -37,6 +37,7 @@ export function trackPageView(properties?: OptionalTrackedProperties): Promise<s
 						- Strings have a max length of 500.
 						- Arrays are converted to a String, with the same max length of 500.
 						- Objects have a max of 50 properties. Arrays are considered 1 property.
+						- When tracking events, the default properties are included in the payload. 
  * @returns
  */
 export function trackEvent(eventName: string, eventData?: EventData): Promise<string> {
@@ -48,6 +49,44 @@ export function trackEvent(eventName: string, eventData?: EventData): Promise<st
 		return window.umami.track(eventName, eventData);
 	} else {
 		return window.umami.track(eventName);
+	}
+}
+
+/**
+ * Track an event with a given name and custom properties
+ * @param eventName Note: event names will be truncated past 50 characters
+ * @param properties the default properties you want to overwrite 
+ * @param eventData Note: Event Data Limits
+						Event Data can work with any JSON data. There are a few rules in place to maintain performance.
+						- Numbers have a max precision of 4.
+						- Strings have a max length of 500.
+						- Arrays are converted to a String, with the same max length of 500.
+						- Objects have a max of 50 properties. Arrays are considered 1 property.
+						- When tracking events, the default properties are included in the payload.
+ * @returns 
+ */
+export function trackEventWithProperties(
+	eventName: string,
+	properties: OptionalTrackedProperties,
+	eventData?: EventData
+): Promise<string> {
+	if (!browser) return Promise.resolve('');
+
+	if (!window.umami) return Promise.resolve('Umami not found.');
+
+	if (eventData) {
+		return window.umami.track((props) => ({
+			...props,
+			...properties,
+			name: eventName,
+			data: eventData
+		}));
+	} else {
+		return window.umami.track((props) => ({
+			...props,
+			...properties,
+			name: eventName
+		}));
 	}
 }
 
