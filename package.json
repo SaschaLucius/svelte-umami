@@ -1,7 +1,14 @@
 {
-	"name": "sveltekit-umami",
+	"name": "@lukulent/svelte-umami",
 	"version": "0.0.1",
 	"license": "MIT",
+	"keywords": [
+		"svelte",
+		"umami",
+		"analytics",
+		"web-analytics",
+		"sveltekit"
+	],
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
