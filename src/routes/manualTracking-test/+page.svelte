@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { UmamiAnalytics, trackEvent, trackEventWithProperties, trackPageView } from '$lib';
 	import { onMount } from 'svelte';
+	onMount(() => {
+		trackPageView();
+	});
 	let url = '/manualTracking-test';
 </script>
 

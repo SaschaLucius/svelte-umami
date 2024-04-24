@@ -3,9 +3,12 @@ import type {
 	EventData,
 	OptionalTrackedProperties,
 	TrackedProperties,
+	UmamiTracker,
 	WindowWithUmami
 } from './types';
 import type { UmamiTrackerConfiguration } from './types';
+import { status } from '$lib/stores/umami';
+import { get } from 'svelte/store';
 
 declare let window: WindowWithUmami;
 
@@ -16,16 +19,37 @@ declare let window: WindowWithUmami;
  */
 export function trackPageView(properties?: OptionalTrackedProperties): Promise<string> {
 	if (!browser) return Promise.resolve('');
-	if (!window.umami) return Promise.resolve('Umami not found.');
+	if ([undefined, 'error', 'removed'].includes(get(status)))
+		return Promise.resolve('Umami not found.');
 
-	if (properties) {
-		return window.umami.track((props: TrackedProperties) => ({
-			...props,
-			...properties
-		}));
-	} else {
-		return window.umami.track();
+	return waitForUmami().then((umami) => {
+		if (properties) {
+			return umami.track((props: TrackedProperties) => ({
+				...props,
+				...properties
+			}));
+		} else {
+			return umami.track();
+		}
+	});
+}
+
+function waitForUmami(): Promise<UmamiTracker> {
+	function waitFor(): Promise<UmamiTracker> {
+		if (window['umami']) {
+			return Promise.resolve(window['umami']);
+		}
+		return new Promise((resolve) => setTimeout(resolve, 100))
+			.then(() => {
+				if ([undefined, 'error', 'removed'].includes(get(status))) {
+					console.error('Umami not found.');
+					throw new Error('Umami not found.');
+				}
+				return Promise.resolve(window['umami']);
+			})
+			.then(() => waitFor());
 	}
+	return waitFor();
 }
 
 /**
@@ -42,14 +66,16 @@ export function trackPageView(properties?: OptionalTrackedProperties): Promise<s
  */
 export function trackEvent(eventName: string, eventData?: EventData): Promise<string> {
 	if (!browser) return Promise.resolve('');
+	if ([undefined, 'error', 'removed'].includes(get(status)))
+		return Promise.resolve('Umami not found.');
 
-	if (!window.umami) return Promise.resolve('Umami not found.');
-
-	if (eventData) {
-		return window.umami.track(eventName, eventData);
-	} else {
-		return window.umami.track(eventName);
-	}
+	return waitForUmami().then((umami) => {
+		if (eventData) {
+			return umami.track(eventName, eventData);
+		} else {
+			return umami.track(eventName);
+		}
+	});
 }
 
 /**
@@ -71,23 +97,25 @@ export function trackEventWithProperties(
 	eventData?: EventData
 ): Promise<string> {
 	if (!browser) return Promise.resolve('');
+	if ([undefined, 'error', 'removed'].includes(get(status)))
+		return Promise.resolve('Umami not found.');
 
-	if (!window.umami) return Promise.resolve('Umami not found.');
-
-	if (eventData) {
-		return window.umami.track((props) => ({
-			...props,
-			...properties,
-			name: eventName,
-			data: eventData
-		}));
-	} else {
-		return window.umami.track((props) => ({
-			...props,
-			...properties,
-			name: eventName
-		}));
-	}
+	return waitForUmami().then((umami) => {
+		if (eventData) {
+			return umami.track((props) => ({
+				...props,
+				...properties,
+				name: eventName,
+				data: eventData
+			}));
+		} else {
+			return umami.track((props) => ({
+				...props,
+				...properties,
+				name: eventName
+			}));
+		}
+	});
 }
 
 const SCRIPT_ID = 'umami_analytics_script';

@@ -1,9 +1,5 @@
 <script lang="ts">
 	import { UmamiAnalytics, handleEvent, trackPageView } from '$lib';
-	import { onMount } from 'svelte';
-	onMount(() => {
-		trackPageView();
-	});
 </script>
 
 <svelte:head>

@@ -228,5 +228,5 @@ export type OptionalTrackedProperties = {
 };
 
 export interface WindowWithUmami extends Window {
-	umami: UmamiTracker;
+	umami: UmamiTracker | undefined;
 }

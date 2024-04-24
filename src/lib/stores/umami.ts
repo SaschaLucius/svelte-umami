@@ -15,3 +15,8 @@ isEnabled.subscribe(
 		typeof localStorage !== 'undefined' &&
 		localStorage.setItem('umami', JSON.stringify({ enabled: value }))
 );
+
+export const status = writable<undefined | 'mounted' | 'removed' | 'loaded' | 'error'>(undefined);
+status.subscribe((value) => {
+	console.debug(value);
+});

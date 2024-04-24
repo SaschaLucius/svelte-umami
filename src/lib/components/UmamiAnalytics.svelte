@@ -1,11 +1,13 @@
 <script context="module" lang="ts">
-	// initialize the script only once
-	let initialized = false;
+	import { status } from '$lib/stores/umami';
+	status.set(undefined);
+	declare let window: WindowWithUmami;
 </script>
 
 <script lang="ts">
-	import type { UmamiTrackerConfiguration } from '$lib/types';
+	import type { UmamiTrackerConfiguration, WindowWithUmami } from '$lib/types';
 	import { browser } from '$app/environment';
+	import { onMount, onDestroy } from 'svelte';
 
 	/** The unique ID of the website */
 	export let websiteID: string;
@@ -16,17 +18,46 @@
 	/** Overwrite the existing script if it is already initialized, Otherwise it could lead to multiple pages views */
 	export let overwrite = false;
 
-	if (initialized && overwrite) {
+	onMount(() => {
+		if (
+			browser &&
+			document.getElementById('umami_analytics_script') !== null &&
+			$status !== 'loaded'
+		) {
+			$status = 'mounted';
+		}
+	});
+
+	onDestroy(() => {
 		if (browser) {
 			const script = document.getElementById('umami_analytics_script');
-			script?.remove();
+			if (script !== null) {
+				script.remove();
+				$status = 'removed';
+				window.umami = undefined;
+			}
 		}
+	});
 
-		initialized = false;
+	if (overwrite && browser) {
+		const script = document.getElementById('umami_analytics_script');
+		if (script !== null) {
+			script.remove();
+			$status = 'removed';
+		}
 	}
 
-	let shouldInitialize = !initialized;
-	initialized = true;
+	let shouldInitialize = [undefined, 'removed', 'error'].includes($status);
+
+	// It triggers after the script was loaded and executed
+	function scriptLoaded() {
+		$status = 'loaded';
+	}
+
+	// Errors that occur during the loading of the script
+	function errorHappened(e: Event) {
+		$status = 'error';
+	}
 </script>
 
 <!--
@@ -48,6 +79,8 @@ Add this component to your SvelteKit app to track user interactions with Umami A
 			src={srcURL}
 			data-website-id={websiteID}
 			{...configuration}
+			on:load={scriptLoaded}
+			on:error={errorHappened}
 		></script>
 	{/if}
 </svelte:head>
