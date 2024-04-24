@@ -17,6 +17,7 @@ Functions:
 
 Stores:
 - isEnabled: Store for reading and writing if the tracking is enabled
+- status: Store for keeping track of the Script status
 
 ## Install the package
 
@@ -205,9 +206,6 @@ If you want to track clicks for a complete section of your website or just multi
 	</section>
 </UmamiTrackClicks>
 ```
-
-
-
 
 # How to contribute
 

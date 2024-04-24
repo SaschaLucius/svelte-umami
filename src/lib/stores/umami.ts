@@ -16,7 +16,5 @@ isEnabled.subscribe(
 		localStorage.setItem('umami', JSON.stringify({ enabled: value }))
 );
 
+/** Svelte store to keep track of the status of the Umami script. */
 export const status = writable<undefined | 'mounted' | 'removed' | 'loaded' | 'error'>(undefined);
-status.subscribe((value) => {
-	console.debug(value);
-});

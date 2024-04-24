@@ -34,22 +34,16 @@ export function trackPageView(properties?: OptionalTrackedProperties): Promise<s
 	});
 }
 
-function waitForUmami(): Promise<UmamiTracker> {
-	function waitFor(): Promise<UmamiTracker> {
-		if (window['umami']) {
-			return Promise.resolve(window['umami']);
+async function waitForUmami(): Promise<UmamiTracker> {
+	let count = 50; // try max 5 seconds
+	while (!window.umami) {
+		if ([undefined, 'error', 'removed'].includes(get(status)) || count > 0) {
+			return { track: () => Promise.resolve('Umami not found.') };
 		}
-		return new Promise((resolve) => setTimeout(resolve, 100))
-			.then(() => {
-				if ([undefined, 'error', 'removed'].includes(get(status))) {
-					console.error('Umami not found.');
-					throw new Error('Umami not found.');
-				}
-				return Promise.resolve(window['umami']);
-			})
-			.then(() => waitFor());
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		count--;
 	}
-	return waitFor();
+	return window.umami;
 }
 
 /**
