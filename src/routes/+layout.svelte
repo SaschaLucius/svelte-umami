@@ -1,5 +1,5 @@
 <script>
-	import UmamiAnalytics from '$lib/components/UmamiAnalytics.svelte';
+	// import UmamiAnalytics from '$lib';
 	import Header from './Header.svelte';
 	import './styles.css';
 </script>

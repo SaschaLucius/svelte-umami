@@ -7,7 +7,7 @@ All by this type-safe Svelte component.
 
 Components:
 - UmamiAnalytics: Umami initialization
-- UmamiAnalyticsEnv: Umami initialization with environment variables
+- UmamiAnalyticsEnv: Umami initialization with environment variables (SvelteKit needed)
 - UmamiTrackClicks: Track clicks in an area
 
 Functions:
@@ -68,6 +68,8 @@ https://umami.is/docs/tracker-configuration
 ```
 
 ### Add tracking to your website with Environment variables
+
+Note: SvelteKit needed
 
 - .env
 ```bash
@@ -209,9 +211,21 @@ If you want to track clicks for a complete section of your website or just multi
 
 # How to contribute
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## How to contribute
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+Contributions are welcome! Here's how you can contribute to the project:
+
+1. Fork the repository on GitHub.
+2. Clone the forked repository to your local machine.
+3. Create a new branch for your changes.
+4. Make your desired changes to the codebase.
+5. Test your changes to ensure they work as expected.
+6. Commit your changes and push them to your forked repository.
+7. Submit a pull request to the original repository.
+
+Please make sure to follow the project's coding conventions and guidelines when making your changes. Also, consider writing tests for your code if applicable.
+
+Thank you for contributing to the project!
 
 ## Developing
 
