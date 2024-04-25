@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import type {
 	EventData,
 	OptionalTrackedProperties,
@@ -11,6 +10,9 @@ import { status } from '$lib/stores/umami';
 import { get } from 'svelte/store';
 
 declare let window: WindowWithUmami;
+
+// https://github.com/flexdinesh/browser-or-node
+const browser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
 /**
  * Track a page view with and without custom properties
