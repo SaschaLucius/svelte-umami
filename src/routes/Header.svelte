@@ -1,11 +1,12 @@
 <script>
 	import { page } from '$app/stores';
+	import { base } from '$app/paths';
 </script>
 
 <header>
 	<div class="corner">
 		<a href="https://kit.svelte.dev">
-			<img src="/svelte-logo.svg" alt="SvelteKit" />
+			<img src="${base}/svelte-logo.svg" alt="SvelteKit" />
 		</a>
 	</div>
 
