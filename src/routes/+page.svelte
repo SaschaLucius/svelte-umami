@@ -18,8 +18,8 @@
 	<h1>
 		<span class="welcome">
 			<picture>
-				<source srcset="${base}/svelte-welcome.webp" type="image/webp" />
-				<img src="${base}/svelte-welcome.png" alt="Welcome" />
+				<source srcset="{base}/svelte-welcome.webp" type="image/webp" />
+				<img src="{base}/svelte-welcome.png" alt="Welcome" />
 			</picture>
 		</span>
 
