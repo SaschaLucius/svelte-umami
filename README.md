@@ -29,6 +29,8 @@ npm i --save-dev @lukulent/svelte-umami
 
 ## Usage
 
+[Example usage](https://saschalucius.github.io/svelte-umami/)
+
 https://umami.is/docs/collect-data
 
 ### Add tracking to your website
