@@ -1,5 +1,7 @@
 # Svelte Umami Analytics
 
+[![MadeWithSvelte.com shield](https://madewithsvelte.com/storage/repo-shields/5086-shield.svg)](https://madewithsvelte.com/p/svelte-umami/shield-link)
+
 Add Umami Analytics easily to your Svelte or SvelteKit app and track analytics and custom events.
 All by this type-safe Svelte component.
 
