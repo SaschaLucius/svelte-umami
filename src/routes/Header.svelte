@@ -43,7 +43,7 @@
 	</nav>
 
 	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
+		<a href="https://github.com/SaschaLucius/svelte-umami">
 			<img src="/github.svg" alt="GitHub" />
 		</a>
 	</div>
