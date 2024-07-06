@@ -1,4 +1,4 @@
-# Svelte Umami Analytics
+# Svelte Umami Analytics (Sumami)
 
 [![MadeWithSvelte.com shield](https://madewithsvelte.com/storage/repo-shields/5086-shield.svg)](https://madewithsvelte.com/p/svelte-umami/shield-link)
 
