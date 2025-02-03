@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { UmamiAnalytics, UmamiTrackClicks } from '$lib';
 </script>
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	// import UmamiAnalytics from '$lib';
 	import Header from './Header.svelte';
 	import './styles.css';

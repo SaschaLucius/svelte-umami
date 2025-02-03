@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Counter from './Counter.svelte';
 	import { base } from '$app/paths';
 	import { UmamiAnalytics } from '$lib';

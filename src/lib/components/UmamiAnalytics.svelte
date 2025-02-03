@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import { status } from '$lib/stores/umami';
 	status.set(undefined);
 	declare let window: WindowWithUmami;
