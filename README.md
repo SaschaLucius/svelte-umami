@@ -5,19 +5,22 @@
 Add Umami Analytics easily to your Svelte or SvelteKit app and track analytics and custom events.
 All by this type-safe Svelte component.
 
-*Important* - this requires a [Umami Analytics](https://umami.is/) account.
+_Important_ - this requires a [Umami Analytics](https://umami.is/) account.
 
 Components:
+
 - UmamiAnalytics: Umami initialization
 - UmamiAnalyticsEnv: Umami initialization with environment variables (SvelteKit needed)
 - UmamiTrackClicks: Track clicks in an area
 
 Functions:
+
 - trackPageView: Manual page view tracking
 - trackEvent: Event tracking
 - handleEvent: Svelte event handler for event tracking
 
 Stores:
+
 - isEnabled: Store for reading and writing if the tracking is enabled
 - status: Store for keeping track of the Script status
 
@@ -35,17 +38,14 @@ https://umami.is/docs/collect-data
 
 ### Add tracking to your website
 
--  include somewhere, where it will be run once e.g. +layout.svelte
+- include somewhere, where it will be run once e.g. +layout.svelte
 
 ```svelte
 <script>
-  import { UmamiAnalytics } from '@lukulent/svelte-umami';
+	import { UmamiAnalytics } from '@lukulent/svelte-umami';
 </script>
 
-<UmamiAnalytics
-	websiteID="123456"
-	srcURL="https://eu.umami.is/script.js"
-/>
+<UmamiAnalytics websiteID="123456" srcURL="https://eu.umami.is/script.js" />
 ```
 
 ### Configure Tracking
@@ -54,13 +54,13 @@ https://umami.is/docs/tracker-configuration
 
 ```svelte
 <script>
-  import { UmamiAnalytics } from '@lukulent/svelte-umami';
+	import { UmamiAnalytics } from '@lukulent/svelte-umami';
 </script>
 
 <UmamiAnalytics
 	websiteID="123456"
 	srcURL="https://eu.umami.is/script.js"
-  configuration={{
+	configuration={{
 		'data-auto-track': true,
 		'data-tag': 'example',
 		'data-exclude-search': true,
@@ -76,18 +76,20 @@ https://umami.is/docs/tracker-configuration
 Note: SvelteKit needed
 
 - .env
+
 ```bash
 PUBLIC_UMAMI_SRC=https://eu.umami.is/script.js
 PUBLIC_UMAMI_WEBSITE_ID=123456
 ```
 
 - +layout.svelte
+
 ```svelte
 <script>
-  import { UmamiAnalyticsEnv } from '@lukulent/svelte-umami';
+	import { UmamiAnalyticsEnv } from '@lukulent/svelte-umami';
 </script>
 
-<UmamiAnalyticsEnv/>
+<UmamiAnalyticsEnv />
 ```
 
 ### Track Page views
@@ -110,6 +112,7 @@ You can disable this behavior by adding 'data-auto-track': false to the configur
 ```
 
 or use custom properties as defined here https://umami.is/docs/tracker-functions
+
 ```svelte
 <button on:click={(e) => trackPageView({ url: 'test', referrer: 'google' })}>
 ```
@@ -126,10 +129,7 @@ You can disable this behavior by adding 'data-auto-track': false to the configur
 	import { UmamiAnalytics } from '@lukulent/svelte-umami';
 </script>
 
-<UmamiAnalytics
-	websiteID="123456"
-	srcURL="https://eu.umami.is/script.js"
-/>
+<UmamiAnalytics websiteID="123456" srcURL="https://eu.umami.is/script.js" />
 
 <button data-umami-event="button pressed"> Click me </button>
 ```
@@ -173,15 +173,11 @@ there is a pre-defined event handler in this library
 
 <button data-umami-event="clicker" on:click={handleEvent}> Clicker </button>
 
-<input
-  data-umami-event="name"
-  type="text"
-  on:change={handleEvent}
-/>
+<input data-umami-event="name" type="text" on:change={handleEvent} />
 
 <select on:change={handleEvent} data-umami-event="cars">
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
+	<option value="volvo">Volvo</option>
+	<option value="saab">Saab</option>
 </select>
 ```
 

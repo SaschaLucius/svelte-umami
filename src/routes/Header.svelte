@@ -15,25 +15,25 @@
 			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 		</svg>
 		<ul>
-			<li aria-current={$page.url.pathname === "{base}/" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/' ? 'page' : undefined}>
 				<a href="{base}/">Home</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/conf-test" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/conf-test' ? 'page' : undefined}>
 				<a href="{base}/conf-test?search=umami">Configuration</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/autoTracking-test" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/autoTracking-test' ? 'page' : undefined}>
 				<a href="{base}/autoTracking-test">auto tracking</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/manualTracking-test" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/manualTracking-test' ? 'page' : undefined}>
 				<a href="{base}/manualTracking-test">manual tracking</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/eventHandler-test" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/eventHandler-test' ? 'page' : undefined}>
 				<a href="{base}/eventHandler-test">Event Handler</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/trackClicks-test" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/trackClicks-test' ? 'page' : undefined}>
 				<a href="{base}/trackClicks-test">Umami Track Clicks</a>
 			</li>
-			<li aria-current={$page.url.pathname === "{base}/about" ? 'page' : undefined}>
+			<li aria-current={$page.url.pathname === '{base}/about' ? 'page' : undefined}>
 				<a href="{base}/about">About</a>
 			</li>
 		</ul>

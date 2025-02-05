@@ -9,6 +9,6 @@ test('index page has expected h1', async ({ page }) => {
 
 test('index page includes Umami Analytics script', async ({ page }) => {
 	await page.goto('/');
-  const analyticsScript = page.getByTestId('umami_analytics_script');
-  await expect(analyticsScript).toHaveCount(1);
+	const analyticsScript = page.getByTestId('umami_analytics_script');
+	await expect(analyticsScript).toHaveCount(1);
 });
