@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { trackEvent, trackPageView } from '$lib';
 
 	import { spring } from 'svelte/motion';
