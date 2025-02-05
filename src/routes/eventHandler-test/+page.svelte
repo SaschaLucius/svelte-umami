@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { UmamiAnalytics, handleEvent, trackPageView } from '$lib';
+	trackPageView();
 </script>
 
 <svelte:head>

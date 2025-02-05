@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { trackEvent, trackPageView } from '$lib';
-
 	import { spring } from 'svelte/motion';
 
 	let count = 0;
+
+	function handleClick() {
+		count += 1;
+		trackEvent('counter-click', { count });
+	}
 
 	trackPageView();
 
@@ -39,7 +43,7 @@
 	</div>
 
 	<button
-		on:click={() => (count += 1)}
+		on:click={handleClick}
 		data-umami-event="Increase the counter by one"
 		data-umami-event-count={count}
 		aria-label="Increase the counter by one"

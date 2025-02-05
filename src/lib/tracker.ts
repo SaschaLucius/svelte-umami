@@ -161,7 +161,7 @@ export async function registerUmami(
 		} else {
 			console.error('umami script not found');
 		}
-	} catch (err) {
+	} catch {
 		console.error('umami failure');
 		const s = window.document.getElementById(SCRIPT_ID);
 		if (s) {

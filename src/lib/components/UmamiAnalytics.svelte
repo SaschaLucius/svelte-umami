@@ -55,7 +55,7 @@
 	}
 
 	// Errors that occur during the loading of the script
-	function errorHappened(e: Event) {
+	function errorHappened() {
 		$status = 'error';
 	}
 </script>
