@@ -6,7 +6,7 @@
 
 <script lang="ts">
 	import type { UmamiTrackerConfiguration, WindowWithUmami } from '$lib/types';
-	import { browser } from '$app/environment';
+	import { BROWSER } from 'esm-env';
 	import { onMount, onDestroy } from 'svelte';
 
 	/** The unique ID of the website */
@@ -20,7 +20,7 @@
 
 	onMount(() => {
 		if (
-			browser &&
+			BROWSER &&
 			document.getElementById('umami_analytics_script') !== null &&
 			$status !== 'loaded'
 		) {
@@ -29,7 +29,7 @@
 	});
 
 	onDestroy(() => {
-		if (browser) {
+		if (BROWSER) {
 			const script = document.getElementById('umami_analytics_script');
 			if (script !== null) {
 				script.remove();
@@ -39,7 +39,7 @@
 		}
 	});
 
-	if (overwrite && browser) {
+	if (overwrite && BROWSER) {
 		const script = document.getElementById('umami_analytics_script');
 		if (script !== null) {
 			script.remove();
