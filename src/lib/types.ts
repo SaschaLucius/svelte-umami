@@ -87,9 +87,8 @@ export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
  * - Arrays are converted to a String, with the same max length of 500.
  * - Objects have a max of 50 properties. Arrays are considered 1 property.
  */
-export interface EventData {
-	[key: string]: number | string | EventData | number[] | string[] | EventData[];
-}
+type EventJSON = string | number | boolean | null | EventJSON[] | { [key: string]: EventJSON };
+export type EventData = { [key: string]: EventJSON };
 
 export type EventProperties = {
 	/**
