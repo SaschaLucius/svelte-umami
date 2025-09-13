@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/svelte';
+import { render, waitFor } from '@testing-library/svelte/svelte5';
 import { get } from 'svelte/store';
 import { describe, it, expect } from 'vitest';
 import { UmamiAnalytics, isEnabled } from './index';
@@ -9,11 +9,14 @@ describe('Test Exports', () => {
 	});
 
 	it('Class', async () => {
-		// Pass valid props so the component renders the script tag in the head
+		// Render component with props (Svelte 5 testing entrypoint)
+		// TEMP: cast component to any until @testing-library/svelte provides proper Svelte 5 types
 		render(UmamiAnalytics, {
-			websiteID: '',
-			srcURL: 'https://eu.umami.is/script.js',
-			configuration: {}
+			props: {
+				websiteID: '',
+				srcURL: 'https://eu.umami.is/script.js',
+				configuration: {}
+			}
 		});
 
 		// Wait for the script element to appear in the head
