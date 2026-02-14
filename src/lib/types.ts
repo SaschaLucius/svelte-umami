@@ -102,6 +102,13 @@ export type CustomEventFunction = (
 	props: PageViewProperties
 ) => EventProperties | PageViewProperties;
 
+/**
+ *
+ * Session Data can work with any JSON data.
+ */
+type SessionJSON = string | number | boolean | null | SessionJSON[] | { [key: string]: SessionJSON };
+export type SessionData = { [key: string]: SessionJSON };
+
 export type UmamiTracker = {
 	track: {
 		/**
@@ -166,6 +173,35 @@ export type UmamiTracker = {
 		 * ```
 		 */
 		(eventFunction: CustomEventFunction): Promise<string>;
+	};
+
+	identify: {
+		/**
+		 * Assign a unique ID to the current session
+		 *
+		 * @example ```
+		 * umami.identify('user-123');
+		 * ```
+		 */
+		(uniqueId: string): Promise<string>;
+
+		/**
+		 * Assign a unique ID and session data to the current session
+		 *
+		 * @example ```
+		 * umami.identify('user-123', { email: 'bob@aol.com', name: 'Bob' });
+		 * ```
+		 */
+		(uniqueId: string, sessionData: SessionData): Promise<string>;
+
+		/**
+		 * Attach session data to the current session without a unique ID
+		 *
+		 * @example ```
+		 * umami.identify({ email: 'bob@aol.com', name: 'Bob' });
+		 * ```
+		 */
+		(sessionData: SessionData): Promise<string>;
 	};
 };
 

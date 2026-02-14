@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { trackEvent, trackPageView } from '$lib';
+	import { trackEvent, trackPageView, trackSession } from '$lib';
+	import { onMount } from 'svelte';
 	import { spring } from 'svelte/motion';
 
 	let count = 0;
@@ -19,7 +20,13 @@
 		// handle negative numbers
 		return ((n % m) + m) % m;
 	}
+
+	onMount(async () => {
+		await trackSession("123456", { email: 'test@test.com', name: 'Test User' });
+	});
 </script>
+
+
 
 <div class="counter">
 	<button
