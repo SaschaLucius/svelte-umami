@@ -1,6 +1,7 @@
 import type {
 	EventData,
 	OptionalTrackedProperties,
+	SessionData,
 	TrackedProperties,
 	UmamiTracker,
 	WindowWithUmami
@@ -40,7 +41,10 @@ async function waitForUmami(): Promise<UmamiTracker> {
 	let count = 50; // try max 5 seconds
 	while (!window.umami) {
 		if ([undefined, 'error', 'removed'].includes(get(status)) || count > 0) {
-			return { track: () => Promise.resolve('Umami not found.') };
+			return {
+				track: () => Promise.resolve('Umami not found.'),
+				identify: () => Promise.resolve('Umami not found.')
+			};
 		}
 		await new Promise((resolve) => setTimeout(resolve, 100));
 		count--;
@@ -110,6 +114,33 @@ export function trackEventWithProperties(
 				...properties,
 				name: eventName
 			}));
+		}
+	});
+}
+
+
+/**
+ * Identify the current session with a unique ID and/or session data.
+ * @param uniqueIdOrSessionData A unique identifier string, or a SessionData object to attach to the session.
+ * @param sessionData Optional session data when the first argument is a unique ID string.
+ * @returns
+ */
+export function trackSession(
+	uniqueIdOrSessionData: string | SessionData,
+	sessionData?: SessionData
+): Promise<string> {
+	if (!browser) return Promise.resolve('');
+	if ([undefined, 'error', 'removed'].includes(get(status)))
+		return Promise.resolve('Umami not found.');
+	return waitForUmami().then((umami) => {
+		if (typeof uniqueIdOrSessionData === 'string') {
+			if (sessionData) {
+				return umami.identify(uniqueIdOrSessionData, sessionData);
+			} else {
+				return umami.identify(uniqueIdOrSessionData);
+			}
+		} else {
+			return umami.identify(uniqueIdOrSessionData);
 		}
 	});
 }
