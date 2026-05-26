@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { isEnabled } from './umami';
 
 describe('Store Test', () => {
