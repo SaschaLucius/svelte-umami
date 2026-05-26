@@ -17,6 +17,7 @@ Functions:
 
 - trackPageView: Manual page view tracking
 - trackEvent: Event tracking
+- trackSession: Session identification with unique ID and/or session data
 - handleEvent: Svelte event handler for event tracking
 
 Stores:
@@ -150,6 +151,48 @@ You can disable this behavior by adding 'data-auto-track': false to the configur
 />
 
 <button on:click={(e) => trackEvent('button pressed', { key: 'value' })}> Track Event </button>
+```
+
+### Track Sessions (Identify)
+
+https://umami.is/docs/tracker-functions
+
+Use `trackSession` to identify the current session by attaching a unique ID and/or custom session data. This calls the Umami `identify` function under the hood.
+
+#### Identify with a unique ID
+
+```svelte
+<script lang="ts">
+	import { trackSession } from '@lukulent/svelte-umami';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		trackSession('user-123');
+	});
+</script>
+```
+
+#### Identify with a unique ID and session data
+
+```svelte
+<script lang="ts">
+	import { trackSession } from '@lukulent/svelte-umami';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		trackSession('user-123', { email: 'bob@aol.com', name: 'Bob' });
+	});
+</script>
+```
+
+#### Identify with session data only
+
+```svelte
+<script lang="ts">
+	import { trackSession } from '@lukulent/svelte-umami';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		trackSession({ email: 'bob@aol.com', name: 'Bob' });
+	});
+</script>
 ```
 
 ### Helpers
