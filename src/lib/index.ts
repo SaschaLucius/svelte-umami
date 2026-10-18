@@ -3,3 +3,5 @@ export { default as UmamiAnalyticsEnv } from '$lib/components/UmamiAnalyticsEnv.
 export { default as UmamiTrackClicks } from '$lib/components/UmamiTrackClicks.svelte';
 export { trackPageView, trackEvent, trackEventWithProperties, handleEvent, trackSession } from '$lib/tracker';
 export { isEnabled, status } from '$lib/stores/umami';
+export type { PageTracking } from '$lib/types';
+

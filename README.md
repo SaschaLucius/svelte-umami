@@ -9,7 +9,7 @@ _Important_ - this requires a [Umami Analytics](https://umami.is/) account.
 
 Components:
 
-- UmamiAnalytics: Umami initialization
+- UmamiAnalytics: Umami initialization (optional `pageTracking="spa"` for SvelteKit client-side navigation)
 - UmamiAnalyticsEnv: Umami initialization with environment variables (SvelteKit needed)
 - UmamiTrackClicks: Track clicks in an area
 
@@ -99,6 +99,39 @@ https://umami.is/docs/tracker-functions
 
 Per default all page views will be tracked als long as, UmamiAnalytics is initialized.
 You can disable this behavior by adding 'data-auto-track': false to the configuration property.
+
+#### SPA / SvelteKit client-side navigation (`pageTracking`)
+
+By default (`pageTracking="umami"`), this package uses Umami's built-in auto-tracking. That matches previous versions of this library.
+
+Umami's auto-tracker can break SvelteKit client-side navigation (full page reloads on `<a>` / `goto`). If you hit that, set `pageTracking="spa"`:
+
+- Turns off Umami's `data-auto-track` (so the script no longer hijacks navigation)
+- Records a page view on every SvelteKit navigation via `afterNavigate`, with the current `url`, `title`, and `referrer`
+- Requires SvelteKit
+- Also disables automatic `data-umami-event` click tracking — use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events instead
+
+```svelte
+<script>
+	import { UmamiAnalytics } from '@lukulent/svelte-umami';
+</script>
+
+<UmamiAnalytics
+	websiteID="123456"
+	srcURL="https://eu.umami.is/script.js"
+	pageTracking="spa"
+/>
+```
+
+Works the same with env-based setup:
+
+```svelte
+<script>
+	import { UmamiAnalyticsEnv } from '@lukulent/svelte-umami';
+</script>
+
+<UmamiAnalyticsEnv pageTracking="spa" />
+```
 
 #### Track Page views manually
 

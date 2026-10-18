@@ -11,6 +11,10 @@ export default defineConfig(({ mode }) => ({
 			{
 				find: '$env/dynamic/public',
 				replacement: path.resolve(__dirname, 'src/env/dynamic/public.mock.js')
+			},
+			{
+				find: '$app/navigation',
+				replacement: path.resolve(__dirname, 'src/app/navigation.mock.js')
 			}
 		]
 	},

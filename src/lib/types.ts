@@ -1,4 +1,14 @@
 /**
+ * How page views are tracked by UmamiAnalytics.
+ * - `umami` (default): Use the Umami script's built-in auto-tracking. Same behavior as before.
+ * - `spa`: Disable Umami auto-tracking and record page views on SvelteKit client-side navigations instead.
+ *   Use this when Umami's auto-tracking breaks SPA routing (full page reloads on navigate).
+ *   Requires SvelteKit. Note: with `spa`, automatic `data-umami-event` click tracking is also disabled;
+ *   use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events.
+ */
+export type PageTracking = 'umami' | 'spa';
+
+/**
  * Configuration for the Umami Tracker
  * @property data-host-url - By default, Umami will send data to wherever the script is located. You can override this to send data to another location.
  * @property data-tag - The custom tag you want tu use for page view tracking
