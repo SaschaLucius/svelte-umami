@@ -220,18 +220,58 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 }
 
 /**
- * Svelte Event Handler, which tracks the event within UmamiAnalytics
+ * Collect plain JSON event data from an element for Umami.
+ * Includes `data-umami-event-*` attributes and form control values when present.
+ */
+function eventDataFromElement(el: Element | null | undefined): EventData {
+	const data: EventData = {};
+	if (!el) return data;
+
+	for (const attr of Array.from(el.attributes)) {
+		if (attr.name.startsWith('data-umami-event-')) {
+			data[attr.name.slice('data-umami-event-'.length)] = attr.value;
+		}
+	}
+
+	if (el instanceof HTMLInputElement) {
+		if (el.type === 'checkbox' || el.type === 'radio') {
+			data.checked = el.checked;
+			data.value = el.value;
+		} else if (el.value !== '') {
+			data.value = el.value;
+		}
+	} else if (el instanceof HTMLSelectElement || el instanceof HTMLTextAreaElement) {
+		if (el.value !== '') {
+			data.value = el.value;
+		}
+	}
+
+	return data;
+}
+
+/**
+ * Svelte Event Handler, which tracks the event within UmamiAnalytics.
+ * Sends plain JSON event data (never the DOM Event object).
  * @param e: Event
  */
 export function handleEvent(e: Event & { currentTarget: HTMLElement }) {
-	// The target property returns the element on which the event occurred, opposed to the currentTarget property, which returns the element whose event listener triggered the event.
-	const targetUmamiId = (e.target as Element)?.getAttribute('data-umami-event');
-	const currentTargetUmamiId = e.currentTarget?.getAttribute('data-umami-event');
-	const targetId = (e.target as Element)?.getAttribute('id');
-	const currentTargetId = e.currentTarget?.getAttribute('id');
+	// target = element the event occurred on; currentTarget = element with the listener
+	const target = e.target as Element | null;
+	const currentTarget = e.currentTarget;
+	const targetUmamiId = target?.getAttribute('data-umami-event');
+	const currentTargetUmamiId = currentTarget?.getAttribute('data-umami-event');
+	const targetId = target?.getAttribute('id');
+	const currentTargetId = currentTarget?.getAttribute('id');
 
-	trackEvent(
-		`${targetUmamiId ?? currentTargetUmamiId ?? targetId ?? currentTargetId} ${e.type}`,
-		e as unknown as EventData
-	);
+	const eventName = `${targetUmamiId ?? currentTargetUmamiId ?? targetId ?? currentTargetId} ${e.type}`;
+	const eventData = {
+		...eventDataFromElement(currentTarget),
+		...eventDataFromElement(target)
+	};
+
+	if (Object.keys(eventData).length > 0) {
+		trackEvent(eventName, eventData);
+	} else {
+		trackEvent(eventName);
+	}
 }
