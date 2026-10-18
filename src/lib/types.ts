@@ -1,11 +1,10 @@
 /**
- * How page views are tracked by UmamiAnalytics.
+ * How page views are tracked by UmamiAnalytics / UmamiAnalyticsKit.
  * - `umami` (default): Use the Umami script's built-in auto-tracking. Same behavior as before.
- * - `spa`: Disable Umami auto-tracking (`data-auto-track="false"`) and record page views on
- *   SvelteKit client-side navigations instead. Use this when Umami's auto-tracking breaks SPA
- *   routing (full page reloads on navigate). Requires SvelteKit.
- *   Note: with `spa`, automatic `data-umami-event` click tracking is also disabled;
- *   use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events.
+ * - `spa`: Disable automatic pageviews (`data-auto-pageview="false"`, Umami ≥ 3.2) and record
+ *   page views manually. Use `UmamiAnalyticsKit` or `UmamiAnalyticsEnv` for SvelteKit
+ *   client-side navigations. Click tracking stays enabled; avoid `data-umami-event` on `<a>`
+ *   tags if that interferes with routing — use `trackEvent` / `handleEvent` instead.
  */
 export type PageTracking = 'umami' | 'spa';
 
@@ -145,7 +144,13 @@ export type CustomEventFunction = (
  * Session Data can work with any JSON data.
  * If the object includes an `id` property, its value is also used as the Distinct ID.
  */
-type SessionJSON = string | number | boolean | null | SessionJSON[] | { [key: string]: SessionJSON };
+type SessionJSON =
+	| string
+	| number
+	| boolean
+	| null
+	| SessionJSON[]
+	| { [key: string]: SessionJSON };
 export type SessionData = { [key: string]: SessionJSON };
 
 export type UmamiTracker = {

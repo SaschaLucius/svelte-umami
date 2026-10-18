@@ -4,16 +4,41 @@ import type {
 	SessionData,
 	TrackedProperties,
 	UmamiTracker,
+	UmamiTrackerConfiguration,
 	WindowWithUmami
 } from './types';
-import type { UmamiTrackerConfiguration } from './types';
-import { status } from '$lib/stores/umami';
+import { isEnabled, status } from '$lib/stores/umami';
 import { get } from 'svelte/store';
 
 declare let window: WindowWithUmami;
 
 // https://github.com/flexdinesh/browser-or-node
 const browser: boolean = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+function trackingDisabled(): boolean {
+	return !get(isEnabled);
+}
+
+function umamiUnavailable(): boolean {
+	return [undefined, 'error', 'removed'].includes(get(status));
+}
+
+/**
+ * Convert Umami tracker configuration to explicit string attributes for a script tag.
+ * Boolean `false` values become `"false"` so Svelte does not drop them when spreading.
+ */
+export function umamiConfigToAttributes(config: UmamiTrackerConfiguration): Record<string, string> {
+	const attrs: Record<string, string> = {};
+	for (const [key, value] of Object.entries(config)) {
+		if (value === undefined || value === null) continue;
+		if (typeof value === 'boolean') {
+			attrs[key] = value ? 'true' : 'false';
+		} else {
+			attrs[key] = String(value);
+		}
+	}
+	return attrs;
+}
 
 /**
  * Track a page view with and without custom properties
@@ -22,8 +47,8 @@ const browser: boolean = typeof window !== 'undefined' && typeof window.document
  */
 export function trackPageView(properties?: OptionalTrackedProperties): Promise<string> {
 	if (!browser) return Promise.resolve('');
-	if ([undefined, 'error', 'removed'].includes(get(status)))
-		return Promise.resolve('Umami not found.');
+	if (trackingDisabled()) return Promise.resolve('Umami disabled.');
+	if (umamiUnavailable()) return Promise.resolve('Umami not found.');
 
 	return waitForUmami().then((umami) => {
 		if (properties) {
@@ -66,8 +91,8 @@ async function waitForUmami(): Promise<UmamiTracker> {
  */
 export function trackEvent(eventName: string, eventData?: EventData): Promise<string> {
 	if (!browser) return Promise.resolve('');
-	if ([undefined, 'error', 'removed'].includes(get(status)))
-		return Promise.resolve('Umami not found.');
+	if (trackingDisabled()) return Promise.resolve('Umami disabled.');
+	if (umamiUnavailable()) return Promise.resolve('Umami not found.');
 
 	return waitForUmami().then((umami) => {
 		if (eventData) {
@@ -97,8 +122,8 @@ export function trackEventWithProperties(
 	eventData?: EventData
 ): Promise<string> {
 	if (!browser) return Promise.resolve('');
-	if ([undefined, 'error', 'removed'].includes(get(status)))
-		return Promise.resolve('Umami not found.');
+	if (trackingDisabled()) return Promise.resolve('Umami disabled.');
+	if (umamiUnavailable()) return Promise.resolve('Umami not found.');
 
 	return waitForUmami().then((umami) => {
 		if (eventData) {
@@ -129,8 +154,8 @@ export function trackSession(
 	sessionData?: SessionData
 ): Promise<string> {
 	if (!browser) return Promise.resolve('');
-	if ([undefined, 'error', 'removed'].includes(get(status)))
-		return Promise.resolve('Umami not found.');
+	if (trackingDisabled()) return Promise.resolve('Umami disabled.');
+	if (umamiUnavailable()) return Promise.resolve('Umami not found.');
 	return waitForUmami().then((umami) => {
 		if (typeof uniqueIdOrSessionData === 'string') {
 			if (sessionData) {
@@ -201,22 +226,9 @@ export async function registerUmami(
 }
 
 function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerConfiguration) {
-	if (config['data-host-url']) scriptElem.setAttribute('data-host-url', config['data-host-url']);
-	if (config['data-auto-track'] !== undefined && !config['data-auto-track'])
-		scriptElem.setAttribute('data-auto-track', 'false');
-	if (config['data-auto-pageview'] !== undefined && !config['data-auto-pageview'])
-		scriptElem.setAttribute('data-auto-pageview', 'false');
-	if (config['data-cache']) scriptElem.setAttribute('data-cache', 'true');
-	if (config['data-domains']) scriptElem.setAttribute('data-domains', config['data-domains']);
-	if (config['data-exclude-search']) scriptElem.setAttribute('data-exclude-search', 'true');
-	if (config['data-exclude-hash']) scriptElem.setAttribute('data-exclude-hash', 'true');
-	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
-	if (config['data-distinct-id'])
-		scriptElem.setAttribute('data-distinct-id', config['data-distinct-id']);
-	if (config['data-performance']) scriptElem.setAttribute('data-performance', 'true');
-	if (config['data-do-not-track']) scriptElem.setAttribute('data-do-not-track', 'true');
-	if (config['data-before-send'])
-		scriptElem.setAttribute('data-before-send', config['data-before-send']);
+	for (const [key, value] of Object.entries(umamiConfigToAttributes(config))) {
+		scriptElem.setAttribute(key, value);
+	}
 }
 
 /**

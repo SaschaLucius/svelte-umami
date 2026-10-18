@@ -21,6 +21,8 @@ export default defineConfig(({ mode }) => ({
 	test: {
 		environment: 'jsdom',
 		setupFiles: ['./vitest-setup.js'],
-		globals: true
+		globals: true,
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		exclude: ['node_modules/**', 'dist/**', '.svelte-kit/**', 'build/**']
 	}
 }));

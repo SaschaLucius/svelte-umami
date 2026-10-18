@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UmamiAnalytics from './UmamiAnalytics.svelte';
+	import UmamiAnalyticsKit from './UmamiAnalyticsKit.svelte';
 	import type { PageTracking, UmamiTrackerConfiguration } from '$lib/types';
 	import { env } from '$env/dynamic/public';
 	const src = env.PUBLIC_UMAMI_SRC ?? '';
@@ -10,7 +10,8 @@
 	/**
 	 * How page views are tracked.
 	 * - `umami` (default): Umami script auto-tracking — unchanged from previous versions
-	 * - `spa`: Sets `data-auto-track="false"` and tracks page views on SvelteKit navigations
+	 * - `spa`: Sets `data-auto-pageview="false"` (Umami ≥ 3.2) and tracks page views on
+	 *   SvelteKit navigations. Requires Umami ≥ 3.2.
 	 */
 	export let pageTracking: PageTracking = 'umami';
 </script>
@@ -22,12 +23,7 @@ Add this component to your SvelteKit app to track user interactions with Umami A
 - The easiest way to use this component is to add it to the root +layout.svelte of your app.
 - It will automatically add the Umami Analytics script to the head of your app.
 - The srcURL and websiteID are set in the .env file by the variables PUBLIC_UMAMI_SRC and PUBLIC_UMAMI_WEBSITE_ID.
-- Set `pageTracking="spa"` if Umami auto-tracking breaks SvelteKit client-side navigation.
+- Set `pageTracking="spa"` if you want manual pageviews on SvelteKit navigations (Umami ≥ 3.2).
 -->
 
-<UmamiAnalytics
-	websiteID={websiteId}
-	srcURL={src}
-	{configuration}
-	{pageTracking}
-/>
+<UmamiAnalyticsKit websiteID={websiteId} srcURL={src} {configuration} {pageTracking} />

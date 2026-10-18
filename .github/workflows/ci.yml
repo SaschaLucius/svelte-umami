@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main, master]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format and lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Package
+        run: npm run package
+
+      - name: Unit tests after package
+        run: npm run test:unit
+
+      - name: Consumer smoke
+        run: npm run test:consumer-smoke
+
+      - name: Production audit
+        run: npm run audit:prod
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Integration tests
+        run: npm run test:integration

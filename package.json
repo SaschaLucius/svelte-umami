@@ -1,6 +1,6 @@
 {
 	"name": "@lukulent/svelte-umami",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"license": "MIT",
 	"keywords": [
 		"svelte",
@@ -30,8 +30,10 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest",
-		"test:unit-ui": "vitest --ui"
+		"test:unit": "vitest run",
+		"test:unit-ui": "vitest --ui",
+		"test:consumer-smoke": "node scripts/consumer-smoke.mjs",
+		"audit:prod": "npm audit --omit=dev"
 	},
 	"exports": {
 		".": {
@@ -46,37 +48,39 @@
 		"!dist/images"
 	],
 	"peerDependencies": {
+		"@sveltejs/kit": "^2.0.0",
 		"svelte": "^4.0.0 || ^5.0.0"
 	},
+	"peerDependenciesMeta": {
+		"@sveltejs/kit": {
+			"optional": true
+		}
+	},
 	"devDependencies": {
-		"@eslint/config-array": "0.19.2",
-		"@eslint/eslintrc": "3.2.0",
 		"@eslint/js": "9.19.0",
-		"@playwright/test": "1.50.1",
-		"@sveltejs/adapter-static": "3.0.8",
-		"@sveltejs/kit": "^2.39.1",
-		"@sveltejs/package": "2.3.10",
-		"@sveltejs/vite-plugin-svelte": "^5.0.0",
-		"@testing-library/jest-dom": "6.6.3",
-		"@testing-library/svelte": "4.2.3",
-		"@types/eslint": "9.6.1",
-		"@typescript-eslint/eslint-plugin": "8.23.0",
-		"@typescript-eslint/parser": "8.23.0",
-		"@vitest/ui": "1.6.1",
-		"eslint": "^9.35.0",
-		"eslint-config-prettier": "10.0.1",
-		"eslint-plugin-svelte": "2.46.1",
+		"@playwright/test": "^1.56.0",
+		"@sveltejs/adapter-static": "^3.0.8",
+		"@sveltejs/kit": "^2.70.3",
+		"@sveltejs/package": "^2.3.10",
+		"@sveltejs/vite-plugin-svelte": "^5.1.1",
+		"@testing-library/jest-dom": "^6.6.3",
+		"@testing-library/svelte": "^4.2.3",
+		"@vitest/ui": "^5.0.5",
+		"eslint": "^9.39.5",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.23.1",
 		"globals": "15.14.0",
-		"jsdom": "24.1.3",
-		"prettier": "3.4.2",
-		"prettier-plugin-svelte": "3.3.3",
-		"publint": "0.3.2",
-		"svelte": "^5.0.0",
-		"svelte-check": "4.3.1",
+		"jsdom": "^24.1.3",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.3",
+		"publint": "^0.3.2",
+		"svelte": "^5.57.2",
+		"svelte-check": "^4.3.1",
 		"tslib": "2.8.1",
 		"typescript": "5.7.3",
-		"vite": "^6.3.0",
-		"vitest": "1.6.1"
+		"typescript-eslint": "^8.71.2",
+		"vite": "^6.4.4",
+		"vitest": "^5.0.5"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",

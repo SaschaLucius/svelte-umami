@@ -1,21 +1,11 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import parser from 'svelte-eslint-parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
+import globals from 'globals';
+import ts from 'typescript-eslint';
+import svelte from 'eslint-plugin-svelte';
+import prettier from 'eslint-config-prettier';
+import svelteConfig from './svelte.config.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all
-});
-
-export default [
+export default ts.config(
 	{
 		ignores: [
 			'**/.DS_Store',
@@ -29,46 +19,38 @@ export default [
 			'!**/.env.example',
 			'**/pnpm-lock.yaml',
 			'**/package-lock.json',
-			'**/yarn.lock'
+			'**/yarn.lock',
+			'scripts/**'
 		]
 	},
-	...compat.extends(
-		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended',
-		'plugin:svelte/recommended',
-		'prettier'
-	),
+	js.configs.recommended,
+	...ts.configs.recommended,
+	...svelte.configs.recommended,
+	prettier,
+	...svelte.configs.prettier,
 	{
-		plugins: {
-			'@typescript-eslint': typescriptEslint
-		},
-
 		languageOptions: {
 			globals: {
 				...globals.browser,
 				...globals.node
-			},
-
-			parser: tsParser,
-			ecmaVersion: 2020,
-			sourceType: 'module',
-
-			parserOptions: {
-				extraFileExtensions: ['.svelte']
 			}
 		}
 	},
 	{
-		files: ['**/*.svelte'],
-
+		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
-			parser: parser,
-			ecmaVersion: 5,
-			sourceType: 'script',
-
 			parserOptions: {
-				parser: '@typescript-eslint/parser'
+				projectService: true,
+				extraFileExtensions: ['.svelte'],
+				parser: ts.parser,
+				svelteConfig
 			}
 		}
+	},
+	{
+		// Showcase app uses `base` from $app/paths; `resolve()` is not required on Kit 2.x peers.
+		rules: {
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
-];
+);

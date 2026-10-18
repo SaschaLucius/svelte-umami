@@ -1,7 +1,15 @@
 import { render, waitFor } from '@testing-library/svelte/svelte5';
 import { get } from 'svelte/store';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { UmamiAnalytics, isEnabled, status } from './index';
+import {
+	UmamiAnalytics,
+	UmamiAnalyticsKit,
+	isEnabled,
+	status,
+	trackPageView,
+	trackEvent,
+	trackSession
+} from './index';
 import { afterNavigateCallbacks, resetAfterNavigateMock } from '../app/navigation.mock.js';
 
 describe('Test Exports', () => {
@@ -9,6 +17,7 @@ describe('Test Exports', () => {
 		resetAfterNavigateMock();
 		document.head.innerHTML = '';
 		status.set(undefined);
+		isEnabled.set(true);
 		delete (window as Window & { umami?: unknown }).umami;
 	});
 
@@ -17,8 +26,6 @@ describe('Test Exports', () => {
 	});
 
 	it('Class', async () => {
-		// Render component with props (Svelte 5 testing entrypoint)
-		// TEMP: cast component to any until @testing-library/svelte provides proper Svelte 5 types
 		render(UmamiAnalytics, {
 			props: {
 				websiteID: '',
@@ -27,15 +34,38 @@ describe('Test Exports', () => {
 			}
 		});
 
-		// Wait for the script element to appear in the head
 		const script = await waitFor(() =>
 			document.head.querySelector('script[src="https://eu.umami.is/script.js"]')
 		);
 		expect(script).not.toBeNull();
 		expect(script?.getAttribute('data-auto-track')).toBeNull();
+		expect(script?.getAttribute('data-auto-pageview')).toBeNull();
+		expect(afterNavigateCallbacks.length).toBe(0);
 	});
 
-	it('pageTracking spa disables data-auto-track', async () => {
+	it('renders false config flags as string attributes', async () => {
+		render(UmamiAnalytics, {
+			props: {
+				websiteID: 'test-id',
+				srcURL: 'https://eu.umami.is/script.js',
+				configuration: {
+					'data-auto-pageview': false,
+					'data-exclude-search': true
+				}
+			}
+		});
+
+		const script = await waitFor(() =>
+			document.head.querySelector('script[src="https://eu.umami.is/script.js"]')
+		);
+		expect(script?.getAttribute('data-auto-pageview')).toBe('false');
+		expect(script?.getAttribute('data-exclude-search')).toBe('true');
+	});
+
+	it('pageTracking spa disables data-auto-pageview and tracks initial view', async () => {
+		const track = vi.fn().mockResolvedValue('ok');
+		(window as Window & { umami?: { track: typeof track } }).umami = { track };
+
 		render(UmamiAnalytics, {
 			props: {
 				websiteID: 'test-id',
@@ -47,18 +77,17 @@ describe('Test Exports', () => {
 		const script = await waitFor(() =>
 			document.head.querySelector('script[src="https://eu.umami.is/script.js"]')
 		);
-		expect(script?.getAttribute('data-auto-track')).toBe('false');
-		expect(afterNavigateCallbacks.length).toBeGreaterThan(0);
+		expect(script?.getAttribute('data-auto-pageview')).toBe('false');
+		expect(script?.getAttribute('data-auto-track')).toBeNull();
+		await waitFor(() => expect(track).toHaveBeenCalled());
 	});
 
-	it('pageTracking spa tracks page view on afterNavigate', async () => {
+	it('UmamiAnalyticsKit tracks page view on afterNavigate when spa', async () => {
 		const track = vi.fn().mockResolvedValue('ok');
 		(window as Window & { umami?: { track: typeof track } }).umami = { track };
-
-		const { status } = await import('./stores/umami');
 		status.set('loaded');
 
-		render(UmamiAnalytics, {
+		render(UmamiAnalyticsKit, {
 			props: {
 				websiteID: 'test-id',
 				srcURL: 'https://eu.umami.is/script.js',
@@ -80,9 +109,27 @@ describe('Test Exports', () => {
 		});
 
 		await waitFor(() => expect(track).toHaveBeenCalled());
-		expect(track).toHaveBeenCalledWith(expect.any(Function));
-		const props = track.mock.calls[0][0]({ website: 'test-id' });
+		const propsCall = track.mock.calls.find((call) => typeof call[0] === 'function');
+		expect(propsCall).toBeTruthy();
+		const props = propsCall![0]({ website: 'test-id' });
 		expect(props.url).toBe('/to?q=1');
 		expect(props.referrer).toBe('https://example.com/from');
+	});
+
+	it('isEnabled gates tracker functions', async () => {
+		const track = vi.fn().mockResolvedValue('ok');
+		const identify = vi.fn().mockResolvedValue('ok');
+		(window as Window & { umami?: { track: typeof track; identify: typeof identify } }).umami = {
+			track,
+			identify
+		};
+		status.set('loaded');
+		isEnabled.set(false);
+
+		await expect(trackPageView()).resolves.toBe('Umami disabled.');
+		await expect(trackEvent('x')).resolves.toBe('Umami disabled.');
+		await expect(trackSession('user-1')).resolves.toBe('Umami disabled.');
+		expect(track).not.toHaveBeenCalled();
+		expect(identify).not.toHaveBeenCalled();
 	});
 });

@@ -9,27 +9,31 @@ _Important_ - this requires a [Umami Analytics](https://umami.is/) account.
 
 Components:
 
-- UmamiAnalytics: Umami initialization (optional `pageTracking="spa"` for SvelteKit client-side navigation)
-- UmamiAnalyticsEnv: Umami initialization with environment variables (SvelteKit needed)
+- UmamiAnalytics: Umami initialization for Svelte and SvelteKit (no SvelteKit imports)
+- UmamiAnalyticsKit: Same as UmamiAnalytics, plus SvelteKit `afterNavigate` pageviews when `pageTracking="spa"`
+- UmamiAnalyticsEnv: Env-based setup (`PUBLIC_UMAMI_*`) with Kit SPA support (SvelteKit needed)
 - UmamiTrackClicks: Track clicks in an area
 
 Functions:
 
 - trackPageView: Manual page view tracking
 - trackEvent: Event tracking
+- trackEventWithProperties: Event tracking with custom page properties
 - trackSession: Session identification with unique ID and/or session data
 - handleEvent: Svelte event handler for event tracking
 
 Stores:
 
-- isEnabled: Store for reading and writing if the tracking is enabled
+- isEnabled: Enables/disables all tracker function calls (`trackPageView`, `trackEvent`, `trackSession`, …)
 - status: Store for keeping track of the Script status
 
 ## Install the package
 
 ```bash
-npm i --save-dev @lukulent/svelte-umami
+npm i @lukulent/svelte-umami
 ```
+
+Peer dependencies: `svelte` ^4 or ^5. For `UmamiAnalyticsKit` / `UmamiAnalyticsEnv`, also install `@sveltejs/kit` ^2.
 
 ## Usage
 
@@ -113,23 +117,20 @@ Use `'data-auto-track': false` only if you want to disable tracker initializatio
 
 By default (`pageTracking="umami"`), this package uses Umami's built-in auto-tracking. That matches previous versions of this library.
 
-Umami's auto-tracker can break SvelteKit client-side navigation (full page reloads on `<a>` / `goto`, especially with `data-umami-event` on links). If you hit that, set `pageTracking="spa"`:
+For manual pageviews on SvelteKit client-side navigations, set `pageTracking="spa"` on `UmamiAnalyticsKit` or `UmamiAnalyticsEnv`:
 
-- Sets `data-auto-track="false"` (same behavior as before — full auto-init off, so link click hijacking stops)
-- Records a page view on every SvelteKit navigation via `afterNavigate`, with the current `url`, `title`, and `referrer`
-- Requires SvelteKit
-- Also disables automatic `data-umami-event` click tracking — use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events instead
+- Requires **Umami ≥ 3.2** and **SvelteKit**
+- Sets `data-auto-pageview="false"` so `window.umami` still initializes (click tracking and other features stay on)
+- Records the initial page view on mount, then each client-side navigation via `afterNavigate`
+- Prefer plain Svelte? Use `UmamiAnalytics` with `pageTracking="spa"` for script config + initial pageview only
+- Avoid `data-umami-event` on `<a>` tags if that interferes with routing; use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` instead
 
 ```svelte
 <script>
-	import { UmamiAnalytics } from '@lukulent/svelte-umami';
+	import { UmamiAnalyticsKit } from '@lukulent/svelte-umami';
 </script>
 
-<UmamiAnalytics
-	websiteID="123456"
-	srcURL="https://eu.umami.is/script.js"
-	pageTracking="spa"
-/>
+<UmamiAnalyticsKit websiteID="123456" srcURL="https://eu.umami.is/script.js" pageTracking="spa" />
 ```
 
 Works the same with env-based setup:
@@ -165,8 +166,8 @@ or use custom properties as defined here https://docs.umami.is/docs/tracker-func
 https://docs.umami.is/docs/tracker-functions
 
 By default events are tracked as long as UmamiAnalytics is initialized and the element has the `data-umami-event` property.
-Automatic event/click tracking is part of tracker initialization; turn it off with `'data-auto-track': false` (or use `pageTracking="spa"`).
-To keep click tracking but send pageviews yourself, prefer `'data-auto-pageview': false` (Umami ≥ 3.2).
+Automatic event/click tracking is part of tracker initialization; turn it off with `'data-auto-track': false`.
+To keep click tracking but send pageviews yourself, prefer `'data-auto-pageview': false` (Umami ≥ 3.2) or `pageTracking="spa"`.
 
 ```svelte
 <script>

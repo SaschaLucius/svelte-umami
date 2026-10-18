@@ -6,10 +6,9 @@
 
 <script lang="ts">
 	import type { PageTracking, UmamiTrackerConfiguration, WindowWithUmami } from '$lib/types';
-	import { trackPageView } from '$lib/tracker';
+	import { trackPageView, umamiConfigToAttributes } from '$lib/tracker';
 	import { BROWSER } from 'esm-env';
 	import { onMount, onDestroy } from 'svelte';
-	import { afterNavigate } from '$app/navigation';
 
 	/** The unique ID of the website */
 	export let websiteID: string;
@@ -22,34 +21,21 @@
 	/**
 	 * How page views are tracked.
 	 * - `umami` (default): Umami script auto-tracking — unchanged from previous versions
-	 * - `spa`: Sets `data-auto-track="false"` and tracks page views on SvelteKit navigations
-	 *   (avoids full page reloads when Umami's auto-tracker hijacks client-side routing).
-	 *   Unchanged from previous versions of this library.
+	 * - `spa`: Sets `data-auto-pageview="false"` (Umami ≥ 3.2) and records the initial page view.
+	 *   For SvelteKit client-side navigations, use `UmamiAnalyticsKit` or `UmamiAnalyticsEnv`.
 	 */
 	export let pageTracking: PageTracking = 'umami';
 
-	// Keep other config, but never leave Umami auto-track on in spa mode.
-	// Intentionally uses data-auto-track (not data-auto-pageview) so click hijacking is also off.
+	// Keep other config; in spa mode disable automatic pageviews only so window.umami still initializes.
 	$: scriptConfiguration =
-		pageTracking === 'spa' ? { ...configuration, 'data-auto-track': false } : configuration;
-
-	afterNavigate(({ from, to }) => {
-		if (pageTracking !== 'spa' || !BROWSER || !to) return;
-
-		trackPageView({
-			url: `${to.url.pathname}${to.url.search}`,
-			title: document.title,
-			referrer: from
-				? `${from.url.origin}${from.url.pathname}${from.url.search}`
-				: undefined
-		});
-	});
+		pageTracking === 'spa' ? { ...configuration, 'data-auto-pageview': false } : configuration;
+	$: scriptAttributes = umamiConfigToAttributes(scriptConfiguration);
 
 	onMount(() => {
 		if (BROWSER && pageTracking === 'spa') {
 			const script = document.getElementById('umami_analytics_script');
 			// Ensure the attribute is present as the string "false" (Umami reads it from the DOM).
-			script?.setAttribute('data-auto-track', 'false');
+			script?.setAttribute('data-auto-pageview', 'false');
 		}
 
 		if (
@@ -58,6 +44,11 @@
 			$status !== 'loaded'
 		) {
 			$status = 'mounted';
+		}
+
+		// Initial pageview for spa mode (SvelteKit afterNavigate misses the hydration enter).
+		if (BROWSER && pageTracking === 'spa') {
+			trackPageView();
 		}
 	});
 
@@ -95,12 +86,12 @@
 
 <!--
 @component
-Add this component to your SvelteKit app to track user interactions with Umami Analytics.
+Add this component to your Svelte or SvelteKit app to track user interactions with Umami Analytics.
 
-- The easiest way to use this component is to add it to the root +layout.svelte of your app.
+- The easiest way to use this component is to add it once near the root of your app.
 - It will automatically add the Umami Analytics script to the head of your app.
 - You will find the websiteID and srcURL in your Umami instance https://umami.is/docs/collect-data.
-- Set `pageTracking="spa"` if Umami auto-tracking breaks SvelteKit client-side navigation.
+- For SvelteKit SPA page tracking (`pageTracking="spa"`), prefer `UmamiAnalyticsKit` or `UmamiAnalyticsEnv`.
 -->
 
 <svelte:head>
@@ -112,7 +103,7 @@ Add this component to your SvelteKit app to track user interactions with Umami A
 			data-testid="umami_analytics_script"
 			src={srcURL}
 			data-website-id={websiteID}
-			{...scriptConfiguration}
+			{...scriptAttributes}
 			on:load={scriptLoaded}
 			on:error={errorHappened}
 		></script>
