@@ -22,12 +22,14 @@
 	/**
 	 * How page views are tracked.
 	 * - `umami` (default): Umami script auto-tracking — unchanged from previous versions
-	 * - `spa`: Disables Umami auto-tracking and tracks page views on SvelteKit navigations
-	 *   (avoids full page reloads when Umami's auto-tracker hijacks client-side routing)
+	 * - `spa`: Sets `data-auto-track="false"` and tracks page views on SvelteKit navigations
+	 *   (avoids full page reloads when Umami's auto-tracker hijacks client-side routing).
+	 *   Unchanged from previous versions of this library.
 	 */
 	export let pageTracking: PageTracking = 'umami';
 
 	// Keep other config, but never leave Umami auto-track on in spa mode.
+	// Intentionally uses data-auto-track (not data-auto-pageview) so click hijacking is also off.
 	$: scriptConfiguration =
 		pageTracking === 'spa' ? { ...configuration, 'data-auto-track': false } : configuration;
 

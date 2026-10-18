@@ -204,10 +204,19 @@ function setScriptSettingsProps(scriptElem: HTMLElement, config: UmamiTrackerCon
 	if (config['data-host-url']) scriptElem.setAttribute('data-host-url', config['data-host-url']);
 	if (config['data-auto-track'] !== undefined && !config['data-auto-track'])
 		scriptElem.setAttribute('data-auto-track', 'false');
+	if (config['data-auto-pageview'] !== undefined && !config['data-auto-pageview'])
+		scriptElem.setAttribute('data-auto-pageview', 'false');
 	if (config['data-cache']) scriptElem.setAttribute('data-cache', 'true');
 	if (config['data-domains']) scriptElem.setAttribute('data-domains', config['data-domains']);
 	if (config['data-exclude-search']) scriptElem.setAttribute('data-exclude-search', 'true');
+	if (config['data-exclude-hash']) scriptElem.setAttribute('data-exclude-hash', 'true');
 	if (config['data-tag']) scriptElem.setAttribute('data-tag', config['data-tag']);
+	if (config['data-distinct-id'])
+		scriptElem.setAttribute('data-distinct-id', config['data-distinct-id']);
+	if (config['data-performance']) scriptElem.setAttribute('data-performance', 'true');
+	if (config['data-do-not-track']) scriptElem.setAttribute('data-do-not-track', 'true');
+	if (config['data-before-send'])
+		scriptElem.setAttribute('data-before-send', config['data-before-send']);
 }
 
 /**

@@ -35,7 +35,7 @@ npm i --save-dev @lukulent/svelte-umami
 
 [Example usage](https://saschalucius.github.io/svelte-umami/)
 
-https://umami.is/docs/collect-data
+https://docs.umami.is/docs/collect-data
 
 ### Add tracking to your website
 
@@ -51,7 +51,7 @@ https://umami.is/docs/collect-data
 
 ### Configure Tracking
 
-https://umami.is/docs/tracker-configuration
+https://docs.umami.is/docs/tracker-configuration
 
 ```svelte
 <script>
@@ -62,15 +62,23 @@ https://umami.is/docs/tracker-configuration
 	websiteID="123456"
 	srcURL="https://eu.umami.is/script.js"
 	configuration={{
-		'data-auto-track': true,
 		'data-tag': 'example',
 		'data-exclude-search': true,
+		'data-exclude-hash': true,
 		'data-host-url': 'https://eu.umami.is',
 		'data-domains': 'saschalucius.github.io',
-		'data-cache': true
+		'data-distinct-id': 'user-123',
+		'data-performance': true,
+		'data-do-not-track': true
 	}}
 />
 ```
+
+Notes on auto-tracking flags (Umami semantics):
+
+- `data-auto-pageview: false` (Umami ≥ 3.2) — turn off automatic pageviews only; keep click tracking and other init.
+- `data-auto-track: false` — disable tracker initialization entirely; send everything yourself with tracker functions.
+- `data-cache` is accepted for backward compatibility but is ignored by current Umami trackers.
 
 ### Add tracking to your website with Environment variables
 
@@ -95,18 +103,19 @@ PUBLIC_UMAMI_WEBSITE_ID=123456
 
 ### Track Page views
 
-https://umami.is/docs/tracker-functions
+https://docs.umami.is/docs/tracker-functions
 
-Per default all page views will be tracked als long as, UmamiAnalytics is initialized.
-You can disable this behavior by adding 'data-auto-track': false to the configuration property.
+By default all page views are tracked as long as UmamiAnalytics is initialized.
+To send pageviews yourself while keeping the rest of the tracker active (Umami ≥ 3.2), set `'data-auto-pageview': false`.
+Use `'data-auto-track': false` only if you want to disable tracker initialization entirely.
 
 #### SPA / SvelteKit client-side navigation (`pageTracking`)
 
 By default (`pageTracking="umami"`), this package uses Umami's built-in auto-tracking. That matches previous versions of this library.
 
-Umami's auto-tracker can break SvelteKit client-side navigation (full page reloads on `<a>` / `goto`). If you hit that, set `pageTracking="spa"`:
+Umami's auto-tracker can break SvelteKit client-side navigation (full page reloads on `<a>` / `goto`, especially with `data-umami-event` on links). If you hit that, set `pageTracking="spa"`:
 
-- Turns off Umami's `data-auto-track` (so the script no longer hijacks navigation)
+- Sets `data-auto-track="false"` (same behavior as before — full auto-init off, so link click hijacking stops)
 - Records a page view on every SvelteKit navigation via `afterNavigate`, with the current `url`, `title`, and `referrer`
 - Requires SvelteKit
 - Also disables automatic `data-umami-event` click tracking — use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events instead
@@ -145,7 +154,7 @@ Works the same with env-based setup:
 </script>
 ```
 
-or use custom properties as defined here https://umami.is/docs/tracker-functions
+or use custom properties as defined here https://docs.umami.is/docs/tracker-functions
 
 ```svelte
 <button on:click={(e) => trackPageView({ url: 'test', referrer: 'google' })}>
@@ -153,10 +162,11 @@ or use custom properties as defined here https://umami.is/docs/tracker-functions
 
 ### Track events
 
-https://umami.is/docs/tracker-functions
+https://docs.umami.is/docs/tracker-functions
 
-Per default all events will be tracked als long as, UmamiAnalytics is initialized and the element has the data-umami-event property.
-You can disable this behavior by adding 'data-auto-track': false to the configuration property.
+By default events are tracked as long as UmamiAnalytics is initialized and the element has the `data-umami-event` property.
+Automatic event/click tracking is part of tracker initialization; turn it off with `'data-auto-track': false` (or use `pageTracking="spa"`).
+To keep click tracking but send pageviews yourself, prefer `'data-auto-pageview': false` (Umami ≥ 3.2).
 
 ```svelte
 <script>
@@ -188,7 +198,7 @@ You can disable this behavior by adding 'data-auto-track': false to the configur
 
 ### Track Sessions (Identify)
 
-https://umami.is/docs/tracker-functions
+https://docs.umami.is/docs/tracker-functions
 
 Use `trackSession` to identify the current session by attaching a unique ID and/or custom session data. This calls the Umami `identify` function under the hood.
 

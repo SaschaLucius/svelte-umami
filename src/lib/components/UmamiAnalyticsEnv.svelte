@@ -10,7 +10,7 @@
 	/**
 	 * How page views are tracked.
 	 * - `umami` (default): Umami script auto-tracking — unchanged from previous versions
-	 * - `spa`: Disables Umami auto-tracking and tracks page views on SvelteKit navigations
+	 * - `spa`: Sets `data-auto-track="false"` and tracks page views on SvelteKit navigations
 	 */
 	export let pageTracking: PageTracking = 'umami';
 </script>

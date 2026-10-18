@@ -1,28 +1,43 @@
 /**
  * How page views are tracked by UmamiAnalytics.
  * - `umami` (default): Use the Umami script's built-in auto-tracking. Same behavior as before.
- * - `spa`: Disable Umami auto-tracking and record page views on SvelteKit client-side navigations instead.
- *   Use this when Umami's auto-tracking breaks SPA routing (full page reloads on navigate).
- *   Requires SvelteKit. Note: with `spa`, automatic `data-umami-event` click tracking is also disabled;
+ * - `spa`: Disable Umami auto-tracking (`data-auto-track="false"`) and record page views on
+ *   SvelteKit client-side navigations instead. Use this when Umami's auto-tracking breaks SPA
+ *   routing (full page reloads on navigate). Requires SvelteKit.
+ *   Note: with `spa`, automatic `data-umami-event` click tracking is also disabled;
  *   use `trackEvent`, `handleEvent`, or `UmamiTrackClicks` for events.
  */
 export type PageTracking = 'umami' | 'spa';
 
 /**
  * Configuration for the Umami Tracker
+ * @see https://docs.umami.is/docs/tracker-configuration
  * @property data-host-url - By default, Umami will send data to wherever the script is located. You can override this to send data to another location.
- * @property data-tag - The custom tag you want tu use for page view tracking
- * @property data-auto-track - By default, Umami tracks all page views and events for you automatically. You can disable this behavior and track events yourself using the tracker functions.
- * @property data-exclude-search - Exclude query parameters from tracking
- * @property data-domains - If you want the tracker to only run on specific domains, you can add them to your tracker script. This is a comma delimited list of domain names. Helps if you are working in a staging/development environment.
- * @property data-cache - If you get a lot of page views from the same user, for example in a forum website, you can cache some data to improve the performance of the tracking script. Note: This will use session storage so you may need to inform your users.
+ * @property data-tag - Group events under a named tag for filtering and A/B testing.
+ * @property data-auto-track - When `false`, disables tracker initialization entirely (pageviews, clicks, path changes, optional features). Use tracker functions to send data yourself. Prefer `data-auto-pageview` if you only want to turn off automatic pageviews (Umami ≥ 3.2).
+ * @property data-auto-pageview - When `false`, disables automatic pageview tracking while keeping the rest of the tracker initialized (Umami ≥ 3.2).
+ * @property data-exclude-search - Exclude query parameters from tracked URLs.
+ * @property data-exclude-hash - Exclude the URL hash from tracked URLs (Umami ≥ 2.16).
+ * @property data-domains - Comma-delimited list of hostnames; the tracker only runs on these domains.
+ * @property data-distinct-id - Distinct ID applied from the first request when the user is known at page load (Umami ≥ 3.4). Max 50 characters.
+ * @property data-performance - Enable Core Web Vitals collection (Umami ≥ 3.1). Prefer `data-auto-pageview="false"` over `data-auto-track="false"` if you still want performance tracking with manual pageviews.
+ * @property data-do-not-track - Respect the browser Do Not Track setting (Umami ≥ 2.17).
+ * @property data-before-send - Name of a `window` function called before data is sent; return a payload to continue or a falsy value to cancel (Umami ≥ 2.18). Must be defined before the script loads.
+ * @property data-cache - Legacy attribute from older Umami trackers. Kept for backward compatibility; current Umami versions ignore it.
  */
 export interface UmamiTrackerConfiguration {
 	'data-host-url'?: string;
 	'data-tag'?: string;
 	'data-auto-track'?: boolean;
+	'data-auto-pageview'?: boolean;
 	'data-exclude-search'?: boolean;
+	'data-exclude-hash'?: boolean;
 	'data-domains'?: string;
+	'data-distinct-id'?: string;
+	'data-performance'?: boolean;
+	'data-do-not-track'?: boolean;
+	'data-before-send'?: string;
+	/** @deprecated No longer supported by current Umami trackers. Still accepted for backward compatibility. */
 	'data-cache'?: boolean;
 }
 
@@ -50,7 +65,7 @@ export type TrackedProperties = {
 	/**
 	 * Page referrer
 	 *
-	 * @description extracted from `window.navigator.language`
+	 * @description extracted from `document.referrer`
 	 * @example 'https://analytics.umami.is/docs/getting-started'
 	 */
 	referrer: string;
@@ -85,6 +100,16 @@ export type TrackedProperties = {
 	 * @example 'b59e9c65-ae32-47f1-8400-119fcf4861c4'
 	 */
 	website: string;
+
+	/**
+	 * Optional tag for grouping / filtering events
+	 */
+	tag?: string;
+
+	/**
+	 * Distinct ID used to identify the visitor
+	 */
+	id?: string;
 };
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
@@ -106,6 +131,10 @@ export type EventProperties = {
 	 */
 	name: string;
 	data?: EventData;
+	/**
+	 * Optional Unix timestamp in seconds to override the event time
+	 */
+	timestamp?: number;
 } & WithRequired<TrackedProperties, 'website'>;
 export type PageViewProperties = WithRequired<TrackedProperties, 'website'>;
 export type CustomEventFunction = (
@@ -114,6 +143,7 @@ export type CustomEventFunction = (
 
 /**
  * Session Data can work with any JSON data.
+ * If the object includes an `id` property, its value is also used as the Distinct ID.
  */
 type SessionJSON = string | number | boolean | null | SessionJSON[] | { [key: string]: SessionJSON };
 export type SessionData = { [key: string]: SessionJSON };
@@ -186,7 +216,7 @@ export type UmamiTracker = {
 
 	identify: {
 		/**
-		 * Assign a unique ID to the current session
+		 * Assign a Distinct ID to the current session
 		 *
 		 * @example ```
 		 * umami.identify('user-123');
@@ -195,7 +225,7 @@ export type UmamiTracker = {
 		(uniqueId: string): Promise<string>;
 
 		/**
-		 * Assign a unique ID and session data to the current session
+		 * Assign a Distinct ID and session data to the current session
 		 *
 		 * @example ```
 		 * umami.identify('user-123', { email: 'bob@aol.com', name: 'Bob' });
@@ -204,10 +234,12 @@ export type UmamiTracker = {
 		(uniqueId: string, sessionData: SessionData): Promise<string>;
 
 		/**
-		 * Attach session data to the current session without a unique ID
+		 * Attach session data to the current session without a unique ID.
+		 * If the object includes an `id` property, its value is also used as the Distinct ID.
 		 *
 		 * @example ```
 		 * umami.identify({ email: 'bob@aol.com', name: 'Bob' });
+		 * umami.identify({ id: 'unique_id', name: 'Bob' });
 		 * ```
 		 */
 		(sessionData: SessionData): Promise<string>;
@@ -234,7 +266,7 @@ export type OptionalTrackedProperties = {
 	/**
 	 * Page referrer
 	 *
-	 * @description extracted from `window.navigator.language`
+	 * @description extracted from `document.referrer`
 	 * @example 'https://analytics.umami.is/docs/getting-started'
 	 */
 	referrer?: string;
@@ -269,6 +301,21 @@ export type OptionalTrackedProperties = {
 	 * @example 'b59e9c65-ae32-47f1-8400-119fcf4861c4'
 	 */
 	website?: string;
+
+	/**
+	 * Optional tag for grouping / filtering events
+	 */
+	tag?: string;
+
+	/**
+	 * Distinct ID used to identify the visitor
+	 */
+	id?: string;
+
+	/**
+	 * Optional Unix timestamp in seconds to override the event time
+	 */
+	timestamp?: number;
 };
 
 export interface WindowWithUmami extends Window {
